@@ -1,7 +1,12 @@
+import { TrackType } from "@/app/types/tracks";
 import styles from "./Filter.module.css"
 import classNames from "classnames";
 
-const Filter = () => {
+type FilterProps = {
+  tracks: TrackType[]
+}
+
+export function Filter({tracks}: FilterProps) {
   return (
     <div className={styles.centerblockFilter}>
       <div className={styles.filterTitle}>Искать по:</div>

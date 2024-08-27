@@ -1,16 +1,19 @@
 import { getTracks } from "@/app/api/tracks";
 import Filter from "../Filter/Filter";
-import PlaylistItem from "../PlaylistItem/PlaylistItem";
 import styles from "./CenterBlock.module.css";
-import classNames from "classnames";
+import { TrackType } from "@/app/types/tracks";
+import { Playlist } from "../Playlist/Playlist";
 
 export async function CenterBlock() {
-  let tracks = [];
-  let error = "";
+  let tracks: TrackType[] = [];
+  let error: string = "";
   try {
     tracks = await getTracks();
-  } catch (error) {
-    
+  } catch (err: unknown) {
+    error =
+      err instanceof Error
+        ? "Ошибка при загрузке треков " + err.message
+        : "Неизвестная ошибка";
   }
 
   return (
@@ -27,26 +30,8 @@ export async function CenterBlock() {
         />
       </div>
       <h2 className={styles.centerblockH2}>Треки</h2>
-      <Filter />
-      <div className={styles.centerblockContent}>
-        <div className={styles.contentTitle}>
-          <div className={classNames(styles.playlistTitleCol, styles.col01)}>
-            Трек
-          </div>
-          <div className={classNames(styles.playlistTitleCol, styles.col02)}>
-            Исполнитель
-          </div>
-          <div className={classNames(styles.playlistTitleCol, styles.col03)}>
-            Альбом
-          </div>
-          <div className={classNames(styles.playlistTitleCol, styles.col04)}>
-            <svg className={styles.playlistTitleSvg}>
-              <use xlinkHref="img/icon/sprite.svg#icon-watch" />
-            </svg>
-          </div>
-        </div>
-        <PlaylistItem />
-      </div>
+      <Filter tracks={tracks}/>
+      <Playlist tracks={tracks} />
     </div>
   );
 }
