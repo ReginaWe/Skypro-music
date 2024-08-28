@@ -14,6 +14,14 @@
   margin-right: 15px;
 }
 
+.filterWrapper {
+  position: relative;
+}
+
+.filterList {
+  position: absolute;
+}
+
 ._btnText:hover {
   border-color: #d9b6ff;
   color: #d9b6ff;
