@@ -30,8 +30,8 @@ export async function CenterBlock() {
         />
       </div>
       <h2 className={styles.centerblockH2}>Треки</h2>
-      <Filter tracks={tracks}/>
-      <Playlist tracks={tracks} />
+      <Filter tracks={tracks.data} />
+      <Playlist tracks={tracks.data} />
     </div>
   );
 }

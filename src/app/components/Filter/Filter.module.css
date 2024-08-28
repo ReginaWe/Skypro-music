@@ -5,13 +5,21 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 51px;
+  gap: 10px;
 }
 .filterTitle {
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
   margin-right: 15px;
+  font-family: StratosSkyeng;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.001em;
+  text-align: left;
+
+  &:hover {
+    color: #ad61ff;
+  }
 }
 
 .filterWrapper {
@@ -20,6 +28,19 @@
 
 .filterList {
   position: absolute;
+  width: Hug (248px) px;
+  height: Hug (305px) px;
+  padding: 34px;
+  gap: 10px;
+  border-radius: 12px;
+  background: #313131;
+  margin-top: 10px;
+}
+
+.filterItem {
+  width: Hug (152px) px;
+  height: Hug (232px) px;
+  gap: 20px;
 }
 
 ._btnText:hover {

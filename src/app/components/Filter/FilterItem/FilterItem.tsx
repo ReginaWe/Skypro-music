@@ -8,16 +8,16 @@ type FilterItemProps = {
   handleFilter: (value: string) => void;
 };
 
-export function FilterItem({ title, list, isActive }: FilterItemProps) {
+export function FilterItem({ title, list, isActive, handleFilter }: FilterItemProps) {
   return (
     <div className={styles.filterWrapper}>
-      <button className={classNames(styles.filterButton, styles._btnText)}>
+      <button onClick={() => handleFilter(title)} className={classNames(styles.filterButton, styles._btnText)}>
         {title}
       </button>
       {isActive && (
         <ul className={styles.filterList}>
           {list.map((item, index) => (
-            <li key={index}>{item}</li>
+            <li className={styles.filterItem} key={index}>{item}</li>
           ))}
         </ul>
       )}
