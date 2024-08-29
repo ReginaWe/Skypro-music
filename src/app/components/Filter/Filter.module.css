@@ -16,31 +16,67 @@
   line-height: 18px;
   letter-spacing: 0.001em;
   text-align: left;
-
-  &:hover {
-    color: #ad61ff;
-  }
 }
 
 .filterWrapper {
   position: relative;
 }
 
-.filterList {
+.filterListContainer {
   position: absolute;
-  width: Hug (248px) px;
-  height: Hug (305px) px;
   padding: 34px;
-  gap: 10px;
   border-radius: 12px;
   background: #313131;
   margin-top: 10px;
 }
+.filterList {
+  width: max-content;
+  max-height: 305px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: auto; /* 
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #4b4949; */
+
+  &::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background-color: #4b4949;
+  }
+
+  &::-webkit-scrollbar-track:hover {
+    background-color: #4b4949;
+  }
+
+  &::-webkit-scrollbar-track:active {
+    background-color: #4b4949;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #ffffff;
+  }
+}
 
 .filterItem {
-  width: Hug (152px) px;
-  height: Hug (232px) px;
-  gap: 20px;
+  cursor: pointer;
+
+  &:hover {
+    color: #ad61ff;
+    text-decoration: underline;
+  }
 }
 
 ._btnText:hover {
@@ -63,6 +99,11 @@
   border: 1px solid #ffffff;
   border-radius: 60px;
   padding: 6px 20px;
+  text-wrap: nowrap;
+
+  &:hover {
+    color: #ad61ff;
+  }
 }
 
 .filterButton:not(:last-child) {

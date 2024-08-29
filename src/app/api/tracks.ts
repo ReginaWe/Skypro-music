@@ -8,5 +8,6 @@ export async function getTracks() {
     throw new Error(res.statusText);
   }
 
-  return res.json();
+  const data = await res.json();
+  return data.data;
 }

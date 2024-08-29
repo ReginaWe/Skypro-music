@@ -11,15 +11,17 @@ type FilterItemProps = {
 export function FilterItem({ title, list, isActive, handleFilter }: FilterItemProps) {
   return (
     <div className={styles.filterWrapper}>
-      <button onClick={() => handleFilter(title)} className={classNames(styles.filterButton, styles._btnText)}>
+      <div onClick={() => handleFilter(title)} className={classNames(styles.filterButton, styles._btnText)}>
         {title}
-      </button>
+      </div>
       {isActive && (
+        <div className={styles.filterListContainer}>
         <ul className={styles.filterList}>
           {list.map((item, index) => (
             <li className={styles.filterItem} key={index}>{item}</li>
           ))}
         </ul>
+        </div>
       )}
     </div>
   );

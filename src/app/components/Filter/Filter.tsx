@@ -17,6 +17,8 @@ export function Filter({ tracks }: FilterProps) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const getUniqueAuthors = getUniqueValues(tracks, "author");
+  /* const getUniqueHours = getUniqueValues(tracks, "release_date"); */
+  const getUniqueGenre = getUniqueValues(tracks, "genre");
 
   function handleFilter(filterName: string) {
     setActiveFilter((prev) => (prev === filterName ? null : filterName));
@@ -34,13 +36,13 @@ export function Filter({ tracks }: FilterProps) {
       <FilterItem
         title={"году выпуска"}
         isActive={activeFilter === "году выпуска"}
-        list={getUniqueAuthors}
+        list={SORT_OPTIONS}
         handleFilter={handleFilter}
       />
       <FilterItem
         title={"жанру"}
         isActive={activeFilter === "жанру"}
-        list={getUniqueAuthors}
+        list={getUniqueGenre}
         handleFilter={handleFilter}
       />
     </div>

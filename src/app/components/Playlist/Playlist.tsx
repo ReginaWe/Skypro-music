@@ -26,9 +26,11 @@ export function Playlist({ tracks }: PlaylistProps) {
           </svg>
         </div>
       </div>
-      {tracks.map((track) => (
-        <PlaylistItem key={track.id} track={track} />
-      ))}
+      <div className={styles.contentPlaylist}>
+        {tracks.map((track) => (
+          <PlaylistItem key={track.id} track={track} />
+        ))}
+      </div>
     </div>
   );
 }
