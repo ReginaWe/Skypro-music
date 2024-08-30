@@ -14,14 +14,13 @@ type FilterProps = {
 };
 
 export function Filter({ tracks }: FilterProps) {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>("");
 
   const getUniqueAuthors = getUniqueValues(tracks, "author");
-  /* const getUniqueHours = getUniqueValues(tracks, "release_date"); */
   const getUniqueGenre = getUniqueValues(tracks, "genre");
 
   function handleFilter(filterName: string) {
-    setActiveFilter((prev) => (prev === filterName ? null : filterName));
+    setActiveFilter((prev) => (prev === filterName ? "" : filterName));
   }
 
   return (

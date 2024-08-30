@@ -35,9 +35,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  overflow: auto; /* 
-  scrollbar-width: thin;
-  scrollbar-color: #ffffff #4b4949; */
+  overflow: auto;
 
   &::-webkit-scrollbar {
     height: 4px;
@@ -104,8 +102,4 @@
   &:hover {
     color: #ad61ff;
   }
-}
-
-.filterButton:not(:last-child) {
-  margin-right: 10px;
 }
