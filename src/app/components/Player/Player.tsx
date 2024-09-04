@@ -11,7 +11,7 @@ const Player = () => {
   if (!currentTrack) {
     return null;
   }
-  const { name, author} = currentTrack;
+  const { name, author } = currentTrack;
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
@@ -49,7 +49,7 @@ const Player = () => {
                 </svg>
               </div>
             </div>
-            <TrackPlay name={name} author={author}/>
+            <TrackPlay name={name} author={author} />
           </div>
           <Volume />
         </div>
