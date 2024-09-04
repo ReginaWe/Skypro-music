@@ -7,6 +7,11 @@ import { TrackPlay } from "../TrackPlay/TrackPlay";
 
 const Player = () => {
   const { currentTrack } = useCurrentTrack();
+
+  if (!currentTrack) {
+    return null;
+  }
+  const { name, author} = currentTrack;
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
@@ -44,7 +49,7 @@ const Player = () => {
                 </svg>
               </div>
             </div>
-            <TrackPlay />
+            <TrackPlay name={name} author={author}/>
           </div>
           <Volume />
         </div>
