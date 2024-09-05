@@ -8,13 +8,13 @@ type TrackProps = {
 };
 
 export function PlaylistItem({ track }: TrackProps) {
-  const {setCurrentTrack} = useCurrentTrack()
+  const { setCurrentTrack } = useCurrentTrack();
 
   const { name, author, album, duration_in_seconds } = track;
 
   const handleTrackClick = () => {
-    setCurrentTrack(track)
-  }
+    setCurrentTrack(track);
+  };
   return (
     <div onClick={handleTrackClick} className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
