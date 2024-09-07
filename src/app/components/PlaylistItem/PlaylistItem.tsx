@@ -1,3 +1,4 @@
+'use client'
 import { TrackType } from "@/app/types/tracks";
 import styles from "./PlaylistItem.module.css";
 import { printTime } from "../../../utils/datetime";
