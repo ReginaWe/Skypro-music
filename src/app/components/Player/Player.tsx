@@ -6,24 +6,14 @@ import classNames from "classnames";
 import { TrackPlay } from "../TrackPlay/TrackPlay";
 import { useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
+import { printTime } from "@/utils/datetime";
 
 const Player = () => {
   const { currentTrack } = useCurrentTrack();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-    }
-    setIsPlaying((prev) => !prev);
-  };
 
   if (!currentTrack) {
     return null;
@@ -36,6 +26,23 @@ const Player = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = Number(e.target.value);
     }
+  };
+  //Функция воспроизведения и паузы трека
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+    }
+    setIsPlaying((prev) => !prev);
+  };
+  //Функция зацикливания трека
+  const repeatTrack = () => {
+    setIsLoop(!isLoop);
+    audioRef.current!.loop = !isLoop;
   };
   return (
     <div className={styles.bar}>
@@ -64,18 +71,15 @@ const Player = () => {
                 onClick={togglePlay}
                 className={classNames(styles.playerBtnPlay, styles._btn)}
               >
-                <svg className={styles.playerBtnPlaySvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-pause" />
-                </svg>
-                {/* {isPlaying ? (
-                  <svg>
+                {isPlaying ? (
+                  <svg className={styles.playerBtnPlaySvg}>
                     <use xlinkHref="img/icon/sprite.svg#icon-pause" />
                   </svg>
                 ) : (
                   <svg className={styles.playerBtnPlaySvg}>
                     <use xlinkHref="img/icon/sprite.svg#icon-play" />
                   </svg>
-                )} */}
+                )}
               </div>
               <div className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
@@ -84,8 +88,13 @@ const Player = () => {
               </div>
               <div
                 className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
+                onClick={repeatTrack}
               >
-                <svg className={styles.playerBtnRepeatSvg}>
+                <svg
+                  className={classNames(styles.playerBtnRepeatSvg, {
+                    [styles.active]: isLoop,
+                  })}
+                >
                   <use xlinkHref="img/icon/sprite.svg#icon-repeat" />
                 </svg>
               </div>
@@ -99,7 +108,13 @@ const Player = () => {
             </div>
             <TrackPlay name={name} author={author} />
           </div>
-          <Volume />
+          <Volume audioRef={audioRef}/>
+          <span className={styles.barTimers}>
+            {
+              audioRef.current && !isNaN(audioRef.current.duration)
+                && `${printTime(audioRef.current.currentTime)} / ${printTime(audioRef.current.duration )}`
+            }
+          </span>
         </div>
       </div>
     </div>
