@@ -121,7 +121,8 @@
   stroke: #696969;
 }
 
-._btnIcon:active svg {
+._btnIcon:active svg,
+._btnIcon.active svg {
   fill: transparent;
   stroke: #ffffff;
   cursor: pointer;

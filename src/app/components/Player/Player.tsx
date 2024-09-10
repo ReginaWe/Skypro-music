@@ -4,7 +4,7 @@ import Volume from "../Volume/Volume";
 import styles from "./Player.module.css";
 import classNames from "classnames";
 import { TrackPlay } from "../TrackPlay/TrackPlay";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
 
@@ -14,6 +14,17 @@ const Player = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const currentAudio = audioRef.current
+    if (!currentTrack || !currentAudio) {
+      return;
+    }
+    setIsPlaying(true);
+    setCurrentTime(0);
+    currentAudio.currentTime = 0;
+    currentAudio.play();
+  }, [currentTrack]);
 
   if (!currentTrack) {
     return null;
@@ -44,6 +55,11 @@ const Player = () => {
     setIsLoop(!isLoop);
     audioRef.current!.loop = !isLoop;
   };
+
+  function updateTime(e: React.ChangeEvent<HTMLAudioElement>) {
+    setCurrentTime(e.currentTarget.currentTime);
+  }
+
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
@@ -52,6 +68,7 @@ const Player = () => {
           ref={audioRef}
           controls
           src={track_file}
+          onTimeUpdate={updateTime}
         ></audio>
         <ProgressBar
           max={duration}
@@ -87,14 +104,12 @@ const Player = () => {
                 </svg>
               </div>
               <div
-                className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
+                className={classNames(styles.playerBtnRepeat, styles._btnIcon, {
+                  [styles.active]: isLoop,
+                })}
                 onClick={repeatTrack}
               >
-                <svg
-                  className={classNames(styles.playerBtnRepeatSvg, {
-                    [styles.active]: isLoop,
-                  })}
-                >
+                <svg className={classNames(styles.playerBtnRepeatSvg)}>
                   <use xlinkHref="img/icon/sprite.svg#icon-repeat" />
                 </svg>
               </div>
@@ -108,12 +123,13 @@ const Player = () => {
             </div>
             <TrackPlay name={name} author={author} />
           </div>
-          <Volume audioRef={audioRef}/>
+          <Volume audioRef={audioRef} />
           <span className={styles.barTimers}>
-            {
-              audioRef.current && !isNaN(audioRef.current.duration)
-                && `${printTime(audioRef.current.currentTime)} / ${printTime(audioRef.current.duration )}`
-            }
+            {audioRef.current &&
+              !isNaN(audioRef.current.duration) &&
+              `${printTime(audioRef.current.currentTime)} / ${printTime(
+                audioRef.current.duration
+              )}`}
           </span>
         </div>
       </div>
