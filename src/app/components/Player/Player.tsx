@@ -7,13 +7,16 @@ import { TrackPlay } from "../TrackPlay/TrackPlay";
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
+import { useAppSelector } from "@/hooks";
 
 const Player = () => {
-  const { currentTrack } = useCurrentTrack();
+  /* const { currentTrack } = useCurrentTrack(); */
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack)
 
   useEffect(() => {
     const currentAudio = audioRef.current

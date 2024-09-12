@@ -1,20 +1,24 @@
-'use client'
+"use client";
 import { TrackType } from "@/app/types/tracks";
 import styles from "./PlaylistItem.module.css";
 import { printTime } from "../../../utils/datetime";
 import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
+import { useAppDispatch } from "@/hooks";
+import { setCurrentTrack } from "@/store/features/playlistSlice";
 
 type TrackProps = {
   track: TrackType;
+  tracks: TrackType[];
 };
 
-export function PlaylistItem({ track }: TrackProps) {
-  const { setCurrentTrack } = useCurrentTrack();
+export function PlaylistItem({ track, tracks }: TrackProps) {
+  /* const { setCurrentTrack } = useCurrentTrack(); */
+  const dispatch = useAppDispatch();
 
   const { name, author, album, duration_in_seconds } = track;
 
   const handleTrackClick = () => {
-    setCurrentTrack(track);
+    dispatch(setCurrentTrack({ track, tracks }));
   };
   return (
     <div onClick={handleTrackClick} className={styles.playlistItem}>
