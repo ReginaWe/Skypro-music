@@ -34,5 +34,3 @@ export function Playlist({ tracks }: PlaylistProps) {
     </div>
   );
 }
-
-// 1.48

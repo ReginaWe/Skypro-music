@@ -7,7 +7,12 @@ import { TrackPlay } from "../TrackPlay/TrackPlay";
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import {
+  setIsShuffle,
+  setNextTrack,
+  setPrevTrack,
+} from "@/store/features/playlistSlice";
 
 const Player = () => {
   /* const { currentTrack } = useCurrentTrack(); */
@@ -16,10 +21,22 @@ const Player = () => {
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const currentTrack = useAppSelector((state) => state.playlist.currentTrack)
+  const currentTrack= useAppSelector((state) => state.playlist.currentTrack);
+  const isShuffle = useAppSelector((state) => state.playlist.isShuffle)
+  const dispatch = useAppDispatch();
+
+  const handleNextTrack = () => {
+    dispatch(setNextTrack());
+  };
+  const handlePrevTrack = () => {
+    dispatch(setPrevTrack());
+  };
+  const handleIsShuffle = () => {
+    dispatch(setIsShuffle(true));
+  };
 
   useEffect(() => {
-    const currentAudio = audioRef.current
+    const currentAudio = audioRef.current;
     if (!currentTrack || !currentAudio) {
       return;
     }
@@ -82,7 +99,7 @@ const Player = () => {
         <div className={styles.barPlayerBlock}>
           <div className={styles.barPlayer}>
             <div className={styles.playerControls}>
-              <div className={styles.playerBtnPrev}>
+              <div onClick={handlePrevTrack} className={styles.playerBtnPrev}>
                 <svg className={styles.playerBtnPrevSvg}>
                   <use xlinkHref="img/icon/sprite.svg#icon-prev" />
                 </svg>
@@ -101,7 +118,7 @@ const Player = () => {
                   </svg>
                 )}
               </div>
-              <div className={styles.playerBtnNext}>
+              <div onClick={handleNextTrack} className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
                   <use xlinkHref="img/icon/sprite.svg#icon-next" />
                 </svg>
@@ -117,7 +134,10 @@ const Player = () => {
                 </svg>
               </div>
               <div
-                className={classNames(styles.playerBtnShuffle, styles._btnIcon)}
+                onClick={handleIsShuffle}
+                className={classNames(styles.playerBtnShuffle, styles._btnIcon, {
+                  [styles.active] : isShuffle
+                })}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
                   <use xlinkHref="img/icon/sprite.svg#icon-shuffle" />

@@ -3,7 +3,7 @@ import { TrackType } from "@/app/types/tracks";
 import styles from "./PlaylistItem.module.css";
 import { printTime } from "../../../utils/datetime";
 import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCurrentTrack } from "@/store/features/playlistSlice";
 
 type TrackProps = {
@@ -12,10 +12,11 @@ type TrackProps = {
 };
 
 export function PlaylistItem({ track, tracks }: TrackProps) {
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
   /* const { setCurrentTrack } = useCurrentTrack(); */
+  const { name, author, album, duration_in_seconds, id } = track;
+  const isPlaying = currentTrack ? currentTrack.id === id : false;
   const dispatch = useAppDispatch();
-
-  const { name, author, album, duration_in_seconds } = track;
 
   const handleTrackClick = () => {
     dispatch(setCurrentTrack({ track, tracks }));
@@ -25,9 +26,15 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
       <div className={styles.playlistTrack}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
-            <svg className={styles.trackTitleSvg}>
-              <use xlinkHref="img/icon/sprite.svg#icon-note" />
-            </svg>
+            {isPlaying ? (
+              <svg className={styles.playingTrack}>
+                <use xlinkHref="img/icon/sprite.svg#icon-playingTrack"></use>
+              </svg>
+            ) : (
+              <svg className={styles.trackTitleSvg}>
+                <use xlinkHref="img/icon/sprite.svg#icon-note" />
+              </svg>
+            )}
           </div>
           <div className="track__title-text">
             <span className={styles.trackTitleLinkspan}>
