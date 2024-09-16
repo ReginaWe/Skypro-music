@@ -5,6 +5,7 @@ type PlaylistStateType = {
   currentTrack: null | TrackType;
   playlist: TrackType[];
   shuffledPlaylist: TrackType[];
+  isPlaying: boolean;
   isShuffle: boolean;
 };
 
@@ -12,6 +13,7 @@ const initialState: PlaylistStateType = {
   currentTrack: null,
   playlist: [],
   shuffledPlaylist: [],
+  isPlaying: false,
   isShuffle: false,
 };
 
@@ -34,7 +36,7 @@ const playlistSlice = createSlice({
         ? state.shuffledPlaylist
         : state.playlist;
       const currentTrackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       const newTrack = playlist[currentTrackIndex + 1];
       if (newTrack) {
@@ -46,19 +48,30 @@ const playlistSlice = createSlice({
         ? state.shuffledPlaylist
         : state.playlist;
       const currentTrackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       const newTrack = playlist[currentTrackIndex - 1];
       if (newTrack) {
         state.currentTrack = newTrack;
       }
     },
-    setIsShuffle: (state, action: PayloadAction<boolean>) => {
-      state.isShuffle = action.payload;
+    setIsPlaying: (state, action: PayloadAction<boolean | string>) => {
+      if (typeof action.payload === "string") {
+        state.isPlaying = !state.isPlaying
+      } else {
+        state.isPlaying = action.payload;
+      }
+    },
+    setIsShuffle: (state, action: PayloadAction<boolean | string>) => {
+      if (typeof action.payload === "string") {
+        state.isShuffle = !state.isShuffle
+      } else {
+        state.isShuffle = action.payload;
+      }
     },
   },
 });
 
-export const { setCurrentTrack, setNextTrack, setIsShuffle, setPrevTrack } =
+export const { setCurrentTrack, setNextTrack, setIsPlaying, setIsShuffle, setPrevTrack } =
   playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;

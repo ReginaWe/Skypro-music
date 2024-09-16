@@ -145,5 +145,6 @@
 .barTimers {
   width: 100px;
   text-align: right;
+  padding-top: 5px;
   padding-right: 10px;
 }

@@ -9,6 +9,7 @@ import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import {
+  setIsPlaying,
   setIsShuffle,
   setNextTrack,
   setPrevTrack,
@@ -16,14 +17,33 @@ import {
 
 const Player = () => {
   /* const { currentTrack } = useCurrentTrack(); */
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  /*  const [isPlaying, setIsPlaying] = useState<boolean>(false); */
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const currentTrack= useAppSelector((state) => state.playlist.currentTrack);
-  const isShuffle = useAppSelector((state) => state.playlist.isShuffle)
+  const { currentTrack, isPlaying, isShuffle } = useAppSelector(
+    (state) => state.playlist
+  );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!audioRef || !audioRef.current) {
+      return;
+    }
+    const handleGoNext = () => {
+      if (!isLoop) {
+        handleNextTrack()
+      }
+    }
+    
+    const audio = audioRef.current;
+    audio.addEventListener("ended", handleGoNext);
+
+    return () => {
+      audio.removeEventListener("ended", handleGoNext);
+    };
+  }, [audioRef.current]);
 
   const handleNextTrack = () => {
     dispatch(setNextTrack());
@@ -32,7 +52,7 @@ const Player = () => {
     dispatch(setPrevTrack());
   };
   const handleIsShuffle = () => {
-    dispatch(setIsShuffle(true));
+    dispatch(setIsShuffle(""));
   };
 
   useEffect(() => {
@@ -40,7 +60,7 @@ const Player = () => {
     if (!currentTrack || !currentAudio) {
       return;
     }
-    setIsPlaying(true);
+    dispatch(setIsPlaying(true));
     setCurrentTime(0);
     currentAudio.currentTime = 0;
     currentAudio.play();
@@ -68,7 +88,7 @@ const Player = () => {
         audio.play();
       }
     }
-    setIsPlaying((prev) => !prev);
+    dispatch(setIsPlaying(""));
   };
   //Функция зацикливания трека
   const repeatTrack = () => {
@@ -135,9 +155,13 @@ const Player = () => {
               </div>
               <div
                 onClick={handleIsShuffle}
-                className={classNames(styles.playerBtnShuffle, styles._btnIcon, {
-                  [styles.active] : isShuffle
-                })}
+                className={classNames(
+                  styles.playerBtnShuffle,
+                  styles._btnIcon,
+                  {
+                    [styles.active]: isShuffle,
+                  }
+                )}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
                   <use xlinkHref="img/icon/sprite.svg#icon-shuffle" />
