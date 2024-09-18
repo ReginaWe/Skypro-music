@@ -1,5 +1,4 @@
 "use client";
-import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
 import Volume from "../Volume/Volume";
 import styles from "./Player.module.css";
 import classNames from "classnames";
@@ -7,7 +6,7 @@ import { TrackPlay } from "../TrackPlay/TrackPlay";
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import {
   setIsPlaying,
   setIsShuffle,
@@ -16,8 +15,6 @@ import {
 } from "@/store/features/playlistSlice";
 
 const Player = () => {
-  /* const { currentTrack } = useCurrentTrack(); */
-  /*  const [isPlaying, setIsPlaying] = useState<boolean>(false); */
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isLoop, setIsLoop] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);

@@ -4,9 +4,8 @@ import styles from "./PlaylistItem.module.css";
 import classNames from "classnames";
 import { printTime } from "../../../utils/datetime";
 import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setCurrentTrack } from "@/store/features/playlistSlice";
-import { useRef, useState } from "react";
 
 type TrackProps = {
   track: TrackType;

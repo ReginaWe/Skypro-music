@@ -1,5 +1,15 @@
+import { fetchFavoriteTracks } from "@/app/api/tracks";
 import { TrackType } from "@/app/types/tracks";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+export const getFavoriteTrack = createAsyncThunk(
+  "playlist/getFavoriteTracks",
+  //указать что это объект с 2 полями
+  async (tokens: any) => {
+    const favoriteTracks = await fetchFavoriteTracks(tokens);
+    return favoriteTracks;
+  }
+);
 
 type PlaylistStateType = {
   currentTrack: null | TrackType;
@@ -7,6 +17,7 @@ type PlaylistStateType = {
   shuffledPlaylist: TrackType[];
   isPlaying: boolean;
   isShuffle: boolean;
+  likeTracks: TrackType[];
 };
 
 const initialState: PlaylistStateType = {
@@ -15,6 +26,7 @@ const initialState: PlaylistStateType = {
   shuffledPlaylist: [],
   isPlaying: false,
   isShuffle: false,
+  likeTracks: [],
 };
 
 const playlistSlice = createSlice({
@@ -57,21 +69,31 @@ const playlistSlice = createSlice({
     },
     setIsPlaying: (state, action: PayloadAction<boolean | string>) => {
       if (typeof action.payload === "string") {
-        state.isPlaying = !state.isPlaying
+        state.isPlaying = !state.isPlaying;
       } else {
         state.isPlaying = action.payload;
       }
     },
     setIsShuffle: (state, action: PayloadAction<boolean | string>) => {
       if (typeof action.payload === "string") {
-        state.isShuffle = !state.isShuffle
+        state.isShuffle = !state.isShuffle;
       } else {
         state.isShuffle = action.payload;
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getFavoriteTrack.fulfilled, (state, action) => {
+      state.likeTracks = action.payload;
+    });
+  },
 });
 
-export const { setCurrentTrack, setNextTrack, setIsPlaying, setIsShuffle, setPrevTrack } =
-  playlistSlice.actions;
+export const {
+  setCurrentTrack,
+  setNextTrack,
+  setIsPlaying,
+  setIsShuffle,
+  setPrevTrack,
+} = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;
