@@ -81,6 +81,14 @@ const playlistSlice = createSlice({
         state.isShuffle = action.payload;
       }
     },
+    setLikeTrack: (state, action: PayloadAction<number>) => {
+      const trackID = action.payload
+      //Добавить трек в likeTracks
+    },
+    setDislikeTrack: (state, action: PayloadAction<number>) => {
+      const trackID = action.payload
+       //убрать трек из likeTracks
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getFavoriteTrack.fulfilled, (state, action) => {
@@ -95,5 +103,7 @@ export const {
   setIsPlaying,
   setIsShuffle,
   setPrevTrack,
+  setDislikeTrack,
+  setLikeTrack
 } = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;
