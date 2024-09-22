@@ -9,7 +9,7 @@ const useLikeTrack = (trackID: number) => {
     access: "",
     refresh: "",
   };
-  const likedTracks = useAppSelector((state) => state.track.likeTracks);
+  const likedTracks = useAppSelector((state) => state.playlist.likeTracks);
   // Получаем состояние лайка из избранных треков
   const isLiked = !!likedTracks.find((track) => track._id === trackID);
 
