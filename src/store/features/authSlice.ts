@@ -15,9 +15,9 @@ type AuthStateType = {
     email: string;
   };
   tokens: {
-    access: string,
+    access: string;
     refresh: string;
-}
+  };
 };
 
 const initialState: AuthStateType = {

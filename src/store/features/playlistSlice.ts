@@ -2,7 +2,7 @@ import { fetchFavoriteTracks } from "@/app/api/tracks";
 import { TrackType } from "@/app/types/tracks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const getFavoriteTrack = createAsyncThunk(
+export const getFavoriteTracks = createAsyncThunk(
   "playlist/getFavoriteTracks",
   //указать что это объект с 2 полями
   async (tokens: any) => {
@@ -91,7 +91,7 @@ const playlistSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getFavoriteTrack.fulfilled, (state, action) => {
+    builder.addCase(getFavoriteTracks.fulfilled, (state, action) => {
       state.likeTracks = action.payload;
     });
   },

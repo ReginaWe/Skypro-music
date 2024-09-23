@@ -1,21 +1,16 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getLogin } from "@/store/features/authSlice";
+import { getLogin, getTokens } from "@/store/features/authSlice";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getTokens } from "../api/auth";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user, tokens } = useAppSelector((state) => state.auth);
+  const tokens = useAppSelector((state) => state.auth.tokens);
   const [formData, setFormData] = useState({ email: "", password: "" });
-
-  /* useEffect(() => {
-    dispatch(getTokens(formData));
-  }, [user, user._id]); */
 
   useEffect(() => {
     if (tokens.access) {

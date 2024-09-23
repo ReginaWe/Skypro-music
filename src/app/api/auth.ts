@@ -53,8 +53,7 @@ export async function getTokens({
   email: string;
   password: string;
 }) {
-    debugger
-    const tokens = await fetch(`${BASE_URL}token/`, {
+    const response = await fetch(`${BASE_URL}token/`, {
         method: "POST",
         body: JSON.stringify({email, password}),
         headers: {
@@ -62,11 +61,13 @@ export async function getTokens({
         }
     })
 
-    if (tokens.ok) {
-        return await tokens.json();
-    } else {
+    if (!response.ok) {
         throw new Error("Ошибка при получении токена");
     }
+
+    const data = await response.json();
+
+    return data;
 }
 
 export async function refreshTokens({

@@ -1,11 +1,14 @@
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
+import { useInitFavorites } from "@/hooks/useInitFavorites";
 
 const Sidebar = () => {
+  useInitFavorites()
+
   return (
     <div className={styles.mainSidebar}>
       <div className={styles.sidebarPersonal}>
-        <p className={styles.sidebarPersonalName}>Sergey.Ivanov</p>
+        <p className={styles.sidebarPersonalName}>{}</p>
         <div className={styles.sidebarIcon}>
           <svg>
             <use xlinkHref="img/icon/sprite.svg#logout" />
