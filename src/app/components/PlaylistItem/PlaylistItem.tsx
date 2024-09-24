@@ -56,11 +56,9 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
           <span className={styles.trackAlbumLink}>{album}</span>
         </div>
         <div onClick={handleLike} className="track__time">
-          {isLiked && (
-            <svg className={styles.trackTimeSvg}>
+            <svg className={classNames(styles.trackTimeSvg, {[styles.active]: isLiked})}>
               <use xlinkHref="img/icon/sprite.svg#icon-like" />
             </svg>
-          )}
           <span className={styles.trackTimeText}>
             {printTime(duration_in_seconds)}
           </span>

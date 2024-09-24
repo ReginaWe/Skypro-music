@@ -17,7 +17,7 @@ type PlaylistStateType = {
   shuffledPlaylist: TrackType[];
   isPlaying: boolean;
   isShuffle: boolean;
-  likeTracks: TrackType[];
+  likedTracks: TrackType[];
 };
 
 const initialState: PlaylistStateType = {
@@ -26,7 +26,7 @@ const initialState: PlaylistStateType = {
   shuffledPlaylist: [],
   isPlaying: false,
   isShuffle: false,
-  likeTracks: [],
+  likedTracks: [],
 };
 
 const playlistSlice = createSlice({
@@ -83,16 +83,16 @@ const playlistSlice = createSlice({
     },
     setLikeTrack: (state, action: PayloadAction<number>) => {
       const trackID = action.payload
-      //Добавить трек в likeTracks
+      //Добавить трек в likedTracks
     },
     setDislikeTrack: (state, action: PayloadAction<number>) => {
       const trackID = action.payload
-       //убрать трек из likeTracks
+       //убрать трек из likedTracks
     }
   },
   extraReducers: (builder) => {
     builder.addCase(getFavoriteTracks.fulfilled, (state, action) => {
-      state.likeTracks = action.payload;
+      state.likedTracks = action.payload;
     });
   },
 });

@@ -1,20 +1,29 @@
+"use client";
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
 import { useInitFavorites } from "@/hooks/useInitFavorites";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { logOut } from "@/store/features/authSlice";
 
 const Sidebar = () => {
-  useInitFavorites()
-
+  useInitFavorites();
+  const dispatch = useAppDispatch();
+  const username = useAppSelector((state) => state.auth.user.username);
+  function handleQuit() {
+    dispatch(logOut());
+  }
   return (
     <div className={styles.mainSidebar}>
-      <div className={styles.sidebarPersonal}>
-        <p className={styles.sidebarPersonalName}>{}</p>
-        <div className={styles.sidebarIcon}>
-          <svg>
-            <use xlinkHref="img/icon/sprite.svg#logout" />
-          </svg>
+      {username && (
+        <div className={styles.sidebarPersonal}>
+          <p className={styles.sidebarPersonalName}>{username}</p>
+          <div className={styles.sidebarIcon} onClick={handleQuit}>
+            <svg>
+              <use xlinkHref="img/icon/sprite.svg#logout" />
+            </svg>
+          </div>
         </div>
-      </div>
+      )}
       <div className={styles.sidebarBlock}>
         <div className={styles.sidebarList}>
           <div className={styles.sidebarItem}>

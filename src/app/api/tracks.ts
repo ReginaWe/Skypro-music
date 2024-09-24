@@ -1,4 +1,5 @@
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
+import { TrackType } from "../types/tracks";
 
 const API_URL =
   "https://webdev-music-003b5b991590.herokuapp.com/catalog/track/all/";
@@ -66,7 +67,7 @@ export async function fetchFavoriteTracks({
 }: {
   access: string;
   refresh: string;
-}) {
+}): Promise<TrackType[]> {
   const res = await fetchWithAuth(
     BASE_URL + `/track/favorite/all/`,
     {
@@ -77,5 +78,6 @@ export async function fetchFavoriteTracks({
     },
     refresh
   );
-  return res.json();
+  const data = await res.json();
+  return data.data;
 }

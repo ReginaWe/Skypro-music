@@ -87,6 +87,9 @@
     height: 12px;
     fill: transparent;
     stroke: #696969;
+    &.active {
+      fill: #b672ff;
+    }
   }
   
   .trackPlayDislike {
