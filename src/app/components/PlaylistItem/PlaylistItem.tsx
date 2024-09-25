@@ -1,29 +1,42 @@
-'use client'
+"use client";
 import { TrackType } from "@/app/types/tracks";
 import styles from "./PlaylistItem.module.css";
+import classNames from "classnames";
 import { printTime } from "../../../utils/datetime";
 import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { setCurrentTrack } from "@/store/features/playlistSlice";
 
 type TrackProps = {
   track: TrackType;
+  tracks: TrackType[];
 };
 
-export function PlaylistItem({ track }: TrackProps) {
-  const { setCurrentTrack } = useCurrentTrack();
+export function PlaylistItem({ track, tracks }: TrackProps) {
+  const {currentTrack, isPlaying} = useAppSelector((state) => state.playlist);
+  /* const { setCurrentTrack } = useCurrentTrack(); */
+  const { name, author, album, duration_in_seconds, _id } = track;/* 
+  const isPlaying = currentTrack ? currentTrack._id === _id : false; */
+  const dispatch = useAppDispatch();
 
-  const { name, author, album, duration_in_seconds } = track;
-
+  
   const handleTrackClick = () => {
-    setCurrentTrack(track);
+    dispatch(setCurrentTrack({ track, tracks }));
   };
   return (
     <div onClick={handleTrackClick} className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
-            <svg className={styles.trackTitleSvg}>
-              <use xlinkHref="img/icon/sprite.svg#icon-note" />
-            </svg>
+            {currentTrack?._id === _id ? (
+              <svg className={classNames(styles.playingTrack, {[styles.active]: isPlaying})}>
+                <use xlinkHref="img/icon/sprite.svg#icon-playingTrack"></use>
+              </svg>
+            ) : (
+              <svg className={styles.trackTitleSvg}>
+                <use xlinkHref="img/icon/sprite.svg#icon-note" />
+              </svg>
+            )}
           </div>
           <div className="track__title-text">
             <span className={styles.trackTitleLinkspan}>

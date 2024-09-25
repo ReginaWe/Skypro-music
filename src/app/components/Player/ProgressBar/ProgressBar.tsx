@@ -10,7 +10,7 @@ type ProgressBarProps = {
 export default function ProgressBar({ max, value, step, onChange }: ProgressBarProps) {
   return (
     <input
-	    className={styles.styledProgressInput}
+	    className={styles.progressInput}
 	    type="range" // Тип элемента - ползунок
 	    min="0" // Минимальное значение ползунка
 	    max={max} // Максимальное значение, зависит от длительности аудио
