@@ -3,12 +3,12 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import { setDislikeTrack, setLikeTrack } from "@/store/features/playlistSlice";
 import { TrackType } from "@/app/types/tracks";
 
-const useLikeTrack = (trackID: number) => {
+const useLikeTrack = (currentTrack: TrackType) => {
   const dispatch = useAppDispatch();
   const likedTracks = useAppSelector((state) => state.playlist.likedTracks);
   const tokens = useAppSelector((store) => store.auth.tokens)
   // Получаем состояние лайка из избранных треков
-  const isLiked = tokens.access && likedTracks.find((track: TrackType) => track._id === trackID);
+  const isLiked = tokens.access && likedTracks.find((track: TrackType) => track._id === currentTrack._id);
 
   async function handleLike(event: React.MouseEvent) {
     event.stopPropagation();
@@ -16,14 +16,14 @@ const useLikeTrack = (trackID: number) => {
     const action = isLiked ? dislikeTrack : likeTrack;
     try {
       await action({
-        trackId: trackID,
+        trackId: currentTrack._id,
         access: tokens.access,
         refresh: tokens.refresh,
       });
       if (isLiked) {
-        dispatch(setDislikeTrack(trackID));
+        dispatch(setDislikeTrack(currentTrack));
       } else {
-        dispatch(setLikeTrack(trackID));
+        dispatch(setLikeTrack(currentTrack));
       }
     } catch (error) {
       throw new Error();

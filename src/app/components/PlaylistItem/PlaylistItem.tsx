@@ -19,7 +19,7 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
   const { name, author, album, duration_in_seconds, _id } = track; /* 
   const isPlaying = currentTrack ? currentTrack._id === _id : false; */
   const dispatch = useAppDispatch();
-  const { isLiked, handleLike } = useLikeTrack(track._id);
+  const { isLiked, handleLike } = useLikeTrack(track);
 
   const handleTrackClick = () => {
     dispatch(setCurrentTrack({ track, tracks }));

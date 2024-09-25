@@ -11,7 +11,7 @@ export default function Favorites() {
 
   return (
     <>
-      <h2 className={styles.centerblockH2}>Треки 555</h2>
+      <h2 className={styles.centerblockH2}>Избранные треки</h2>
       <Filter tracks={likedTracks} />
       <Playlist tracks={likedTracks} />
     </>

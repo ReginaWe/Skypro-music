@@ -1,15 +1,15 @@
 import useLikeTrack from "@/hooks/useLikeTrack";
 import styles from "./TrackPlay.module.css";
 import classNames from "classnames";
+import { TrackType } from "@/app/types/tracks";
 
 type TrackPlayProps = {
-  _id: number;
-  name: string;
-  author: string;
+  track: TrackType;
 };
 
-export function TrackPlay({ name, author, _id }: TrackPlayProps) {
-  const { isLiked, handleLike } = useLikeTrack(_id);
+export function TrackPlay({ track }: TrackPlayProps) {
+  const { isLiked, handleLike } = useLikeTrack(track);
+  const { name, author, _id } = track
 
   return (
     <div className={styles.playerTrackPlay}>

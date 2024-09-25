@@ -1,5 +1,8 @@
 "use client";
 
+import styles from "./page.module.css";
+import cn from "classnames"
+
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { getLogin, getTokens } from "@/store/features/authSlice";
 import Link from "next/link";
@@ -31,21 +34,33 @@ export default function SignIn() {
     await dispatch(getTokens(formData));
   }
   return (
-    <>
-      <input
-        name="email"
-        value={formData.email}
-        type="email"
-        onChange={handleChangeFormData}
-      />
-      <input
-        name="password"
-        value={formData.password}
-        type="password"
-        onChange={handleChangeFormData}
-      />
-      <button onClick={handleLogIn}>Войти</button>
-      <Link href="#">Зарегистрироваться</Link>
-    </>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        
+        <div className={styles.modalBlock}>
+          <form className={styles.modalForm} action="#">
+            <input
+            name="email"
+            value={formData.email}
+            type="email"
+            onChange={handleChangeFormData}
+            placeholder="Почта"
+            className={cn(styles.modalInput, styles.gaped)}
+          />
+          <input
+            name="password"
+            value={formData.password}
+            type="password"
+            onChange={handleChangeFormData}
+            placeholder="Пароль"
+            className={styles.modalInput}
+          />
+          <button onClick={handleLogIn} className={styles.modalButton}>Войти</button>
+          <Link href="#">Зарегистрироваться</Link>
+          </form>
+          
+        </div>
+      </div>
+    </div>
   );
 }

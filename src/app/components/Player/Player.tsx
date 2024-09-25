@@ -165,7 +165,7 @@ const Player = () => {
                 </svg>
               </div>
             </div>
-            <TrackPlay name={name} author={author} _id={_id}/>
+            <TrackPlay track={currentTrack}/>
           </div>
           <Volume audioRef={audioRef} />
           <span className={styles.barTimers}>
