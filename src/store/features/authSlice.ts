@@ -1,5 +1,6 @@
 import * as API from "@/app/api/auth";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ErrorMessage, getEmptyError } from "@/app/types/error";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const getLogin = createAsyncThunk("auth/getLogin",API.login);
 export const getSignUp = createAsyncThunk("auth/getSignUp",API.signUp);
@@ -22,11 +23,11 @@ type AuthStateType = {
 
 const initialState: AuthStateType = {
     user: {
-        _id: 0,
-        username: "",
-        first_name: "",
-        last_name: "",
-        email: "",
+      _id: 0,
+      username: "",
+      first_name: "",
+      last_name: "",
+      email: "",
     },
     tokens: {
       access: "",
