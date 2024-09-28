@@ -23,17 +23,15 @@ export async function login({
 }
 
 export async function signUp({
-  username,
   email,
   password,
 }: {
-  username: string;
   email: string;
   password: string;
 }) {
   const data = await fetch(`${BASE_URL}signup/`, {
     method: "POST",
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ email, password, username: email,}),
     headers: {
       "content-type": "application/json",
     },

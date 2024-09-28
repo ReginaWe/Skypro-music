@@ -11,13 +11,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function SignUp() {
+  const error = useAppSelector((state) => state.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    username: "",
+    passwordTwo: "",
   });
 
   useEffect(() => {
@@ -26,7 +27,6 @@ export default function SignUp() {
     }
   }, [tokens, tokens.access]);
 
- 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData({
@@ -34,10 +34,23 @@ export default function SignUp() {
       [name]: value,
     });
   }
-   async function handleRegister(event: React.MouseEvent<HTMLButtonElement>) {
+  async function handleRegister(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    await dispatch(getSignUp(formData));
-    await dispatch(getTokens(formData));
+
+    try {
+      if (!formData.email || !formData.password || !formData.passwordTwo) {
+        alert("Введите данные для входа");
+        return;
+      }
+      if (formData.password !== formData.passwordTwo) {
+        return alert("Оба пароля должны совпадать");
+      }
+      await dispatch(getSignUp(formData));/* 
+      await dispatch(getTokens(formData)); */
+      router.push("/signIn");
+    } catch (error: unknown) {
+      console.error("error");
+    }
   }
   return (
     <div className={styles.wrapper}>
@@ -70,12 +83,13 @@ export default function SignUp() {
             />
             <input
               onChange={handleInputChange}
-              name="username"
-              type="text"
-              value={formData.username}
-              placeholder="Имя пользоателя"
+              name="passwordTwo"
+              type="password"
+              value={formData.passwordTwo}
+              placeholder="Повторите пароль"
               className={styles.modalInput}
             />
+            <p className={styles.error}>{error && error}</p>
             <button
               onClick={handleRegister}
               className={cn(styles.modalEnter, styles.gaped)}

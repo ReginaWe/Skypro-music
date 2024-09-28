@@ -1,6 +1,8 @@
 import * as API from "@/app/api/auth";
-import { ErrorMessage, getEmptyError } from "@/app/types/error";
+import { useAppSelector } from "@/hooks/hooks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { WritableDraft} from "immer";
+import type { RootState } from "../store";
 
 export const getLogin = createAsyncThunk("auth/getLogin",API.login);
 export const getSignUp = createAsyncThunk("auth/getSignUp",API.signUp);
@@ -14,6 +16,7 @@ type AuthStateType = {
     first_name: string;
     last_name: string;
     email: string;
+    error: string
   };
   tokens: {
     access: string;
@@ -28,6 +31,7 @@ const initialState: AuthStateType = {
       first_name: "",
       last_name: "",
       email: "",
+      error: "",
     },
     tokens: {
       access: "",
@@ -63,8 +67,21 @@ const authSlice = createSlice({
     .addCase(refreshTokens.fulfilled, (state, action) => {
         state.tokens = action.payload
     })
+    .addCase(getLogin.rejected, (state, action) => {
+      if (action.error.message) {
+        state.user.error = action.error.message;
+        console.error("Error:", action.error.message);
+      }
+    })
+    .addCase(getSignUp.rejected, (state, action) => {
+      if (action.error.message) {
+        state.user.error = action.error.message;
+        console.error("Error:", action.error.message);
+      }
+    });
   },
 });
 
+export const checkUser = (state: RootState) => Boolean(state.auth.tokens.access)
 export const {logOut} = authSlice.actions;
 export const authReducer = authSlice.reducer;

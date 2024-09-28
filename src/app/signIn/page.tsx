@@ -4,17 +4,19 @@ import styles from "./signIn.module.css";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getLogin, getTokens} from "@/store/features/authSlice";
+import { getLogin, getTokens } from "@/store/features/authSlice";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function SignIn() { 
+export default function SignIn() {
+  const error = useAppSelector((state) => state.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
   const [formData, setFormData] = useState({ email: "", password: "" });
+
 
   useEffect(() => {
     if (tokens.access) {
@@ -32,16 +34,37 @@ export default function SignIn() {
   async function handleLogIn(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
-    await dispatch(getLogin(formData));
-    await dispatch(getTokens(formData));
+    try {
+      if (!formData.email || !formData.password) {
+        alert("Введите данные для входа");
+        return;
+      }
+      await Promise.all([
+        dispatch(getLogin(formData)).unwrap(),
+        dispatch(getTokens(formData)).unwrap(),
+      ]);
+      router.push("/tracks");
+    } catch (error: unknown) {
+      console.error("error");
+    }
   }
+
+  function handleOpenSigningUp() {
+    router.replace("/signUp");
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.modalBlock}>
           <form className={styles.modalForm} action="#">
-          <Link className={styles.modalLogo} href="/tracks">
-              <Image src="/img/logo_modal.png" alt="logo" width={140} height={22} />
+            <Link className={styles.modalLogo} href="/tracks">
+              <Image
+                src="/img/logo_modal.png"
+                alt="logo"
+                width={140}
+                height={22}
+              />
             </Link>
             <input
               name="email"
@@ -59,15 +82,16 @@ export default function SignIn() {
               placeholder="Пароль"
               className={styles.modalInput}
             />
+            <p className={styles.error}>{error && error}</p>
             <button
               onClick={handleLogIn}
               className={cn(styles.modalEnter, styles.gaped)}
             >
               Войти
             </button>
-            <Link className={styles.modalAdditional} href="/signUp">
+            <button className={styles.modalAdditional} onClick={handleOpenSigningUp}>
               Зарегистрироваться
-            </Link>
+            </button>
           </form>
         </div>
       </div>

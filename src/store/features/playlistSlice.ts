@@ -94,7 +94,6 @@ const playlistSlice = createSlice({
     });
   },
 });
-
 export const {
   setCurrentTrack,
   setNextTrack,
