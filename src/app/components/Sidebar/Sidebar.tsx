@@ -4,6 +4,7 @@ import styles from "./Sidebar.module.css";
 import { useInitFavorites } from "@/hooks/useInitFavorites";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { logOut } from "@/store/features/authSlice";
+import Link from "next/link";
 
 const Sidebar = () => {
   useInitFavorites();
@@ -27,7 +28,7 @@ const Sidebar = () => {
       <div className={styles.sidebarBlock}>
         <div className={styles.sidebarList}>
           <div className={styles.sidebarItem}>
-            <a className={styles.sidebarLink} href="#">
+            <Link className={styles.sidebarLink} href="/tracks/category/1/">
               <Image
                 className={styles.sidebarImg}
                 src="/img/playlist01.png"
@@ -35,10 +36,10 @@ const Sidebar = () => {
                 height={150}
                 width={250}
               />
-            </a>
+            </Link>
           </div>
           <div className={styles.sidebarItem}>
-            <a className={styles.sidebarLink} href="#">
+            <Link className={styles.sidebarLink} href="/tracks/category/2/">
               <Image
                 className={styles.sidebarImg}
                 src="/img/playlist02.png"
@@ -46,10 +47,10 @@ const Sidebar = () => {
                 height={150}
                 width={250}
               />
-            </a>
+            </Link>
           </div>
           <div className={styles.sidebarItem}>
-            <a className={styles.sidebarLink} href="#">
+            <Link className={styles.sidebarLink} href="/tracks/category/3/">
               <Image
                 className={styles.sidebarImg}
                 src="/img/playlist03.png"
@@ -57,7 +58,7 @@ const Sidebar = () => {
                 height={150}
                 width={250}
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

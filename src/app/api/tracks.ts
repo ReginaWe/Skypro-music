@@ -81,3 +81,16 @@ export async function fetchFavoriteTracks({
   const data = await res.json();
   return data.data;
 }
+
+export async function fetchSelectionTracks(id: string): Promise<TrackType[]> {
+  const res = await fetch(BASE_URL + `/selection/` + id);
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  const data = await res.json();
+  return data.data;
+}
+
+//1:13

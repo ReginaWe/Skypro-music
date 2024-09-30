@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Skypro music - Favorites",
+  title: "Skypro music - Category",
   description: "Слушай до дыр",
 };
 
