@@ -18,6 +18,7 @@ type PlaylistStateType = {
   isPlaying: boolean;
   isShuffle: boolean;
   likedTracks: TrackType[];
+  
 };
 
 const initialState: PlaylistStateType = {

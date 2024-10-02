@@ -11,7 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function SignUp() {
-  const error = useAppSelector((state) => state.error);
+  const error = useAppSelector((state) => state.auth.user.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
@@ -43,10 +43,13 @@ export default function SignUp() {
         return;
       }
       if (formData.password !== formData.passwordTwo) {
-        return alert("Оба пароля должны совпадать");
+        alert("Оба пароля должны совпадать");
+        return;
       }
-      await dispatch(getSignUp(formData));/* 
-      await dispatch(getTokens(formData)); */
+      await Promise.all([
+        dispatch(getSignUp(formData)).unwrap(),
+        dispatch(getTokens(formData)).unwrap(),
+      ]);
       router.push("/signIn");
     } catch (error: unknown) {
       console.error("error");
@@ -89,7 +92,7 @@ export default function SignUp() {
               placeholder="Повторите пароль"
               className={styles.modalInput}
             />
-            <p className={styles.error}>{error && error}</p>
+            <p className={styles.errorBlock}>{error}</p>
             <button
               onClick={handleRegister}
               className={cn(styles.modalEnter, styles.gaped)}

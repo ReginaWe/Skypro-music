@@ -11,12 +11,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function SignIn() {
-  const error = useAppSelector((state) => state.error);
+  const error = useAppSelector((state) => state.auth.user.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
   const [formData, setFormData] = useState({ email: "", password: "" });
-
 
   useEffect(() => {
     if (tokens.access) {
@@ -82,14 +81,17 @@ export default function SignIn() {
               placeholder="Пароль"
               className={styles.modalInput}
             />
-            <p className={styles.error}>{error && error}</p>
+            <p className={styles.errorBlock}>{error}</p>
             <button
               onClick={handleLogIn}
               className={cn(styles.modalEnter, styles.gaped)}
             >
               Войти
             </button>
-            <button className={styles.modalAdditional} onClick={handleOpenSigningUp}>
+            <button
+              className={styles.modalAdditional}
+              onClick={handleOpenSigningUp}
+            >
               Зарегистрироваться
             </button>
           </form>

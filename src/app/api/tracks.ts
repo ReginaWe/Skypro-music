@@ -5,6 +5,7 @@ const API_URL =
   "https://webdev-music-003b5b991590.herokuapp.com/catalog/track/all/";
 
 const BASE_URL = "https://webdev-music-003b5b991590.herokuapp.com/catalog/";
+const URL_Selection = "https://webdev-music-003b5b991590.herokuapp.com/catalog/selection/"
 
 export async function getTracks() {
   const res = await fetch(API_URL);
@@ -83,14 +84,13 @@ export async function fetchFavoriteTracks({
 }
 
 export async function fetchSelectionTracks(id: string): Promise<TrackType[]> {
-  const res = await fetch(BASE_URL + `/selection/` + id);
+  const res = await fetch(URL_Selection + id);
 
   if (!res.ok) {
     throw new Error(res.statusText);
   }
 
   const data = await res.json();
-  return data.data;
+  return data.items;
 }
 
-//1:13
