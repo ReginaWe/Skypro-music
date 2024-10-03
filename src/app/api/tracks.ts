@@ -1,5 +1,5 @@
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
-import { TrackType } from "../types/tracks";
+import { CategoryDataType, TrackType } from "../types/tracks";
 
 const API_URL =
   "https://webdev-music-003b5b991590.herokuapp.com/catalog/track/all/";
@@ -28,7 +28,7 @@ export async function likeTrack({
   refresh: string;
 }) {
   const res = await fetchWithAuth(
-    BASE_URL + `/track/${trackId}/favorite/`,
+    `${BASE_URL}/track/${trackId}/favorite/`,
     {
       method: "POST",
       headers: {
@@ -83,7 +83,7 @@ export async function fetchFavoriteTracks({
   return data.data;
 }
 
-export async function fetchSelectionTracks(id: string): Promise<TrackType[]> {
+export async function fetchSelectionTracks(id: string): Promise<CategoryDataType> {
   const res = await fetch(URL_Selection + id);
 
   if (!res.ok) {
@@ -91,6 +91,5 @@ export async function fetchSelectionTracks(id: string): Promise<TrackType[]> {
   }
 
   const data = await res.json();
-  return data.items;
+  return data.data;
 }
-

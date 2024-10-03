@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Skypro music - Category",
-  description: "Слушай до дыр",
+  description: "Слушай до дыр наши подборки",
 };
 
 export default function RootLayout({
