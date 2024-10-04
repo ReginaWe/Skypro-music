@@ -4,7 +4,7 @@ import styles from "./signUp.module.css";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getSignUp, getTokens } from "@/store/features/authSlice";
+import { getSignUp, getTokens, setError } from "@/store/features/authSlice";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -39,20 +39,42 @@ export default function SignUp() {
 
     try {
       if (!formData.email || !formData.password || !formData.passwordTwo) {
-        alert("Введите данные для входа");
+        dispatch(
+          setError(
+            "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+          )
+        );
         return;
       }
       if (formData.password !== formData.passwordTwo) {
-        alert("Оба пароля должны совпадать");
+        dispatch(setError("Оба пароля должны совпадать"));
         return;
       }
-      await Promise.all([
+      dispatch(getSignUp(formData))
+        .then((response) => {
+          if (response.ok) {
+            dispatch(getTokens(formData));
+          }
+        })
+        .then((response) => {
+          console.log("tokens:", response);
+        });
+      /*  await Promise.all([
         dispatch(getSignUp(formData)).unwrap(),
         dispatch(getTokens(formData)).unwrap(),
-      ]);
+      ]).then(([responseUser, responseTokens]) => {
+        if (responseUser.ok && !responseTokens.ok) {
+          dispatch(getTokens(formData)).unwrap();
+        }
+      }); */
       router.push("/signIn");
     } catch (error: unknown) {
       console.error("error");
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      } else {
+        dispatch(setError("Произошла ошибка, попробуйте позже"));
+      }
     }
   }
   return (
@@ -94,8 +116,9 @@ export default function SignUp() {
             />
             <p className={styles.errorBlock}>{error}</p>
             <button
-              onClick={handleRegister}
               className={cn(styles.modalEnter, styles.gaped)}
+              type="button"
+              onClick={handleRegister}
             >
               Зарегистрироваться
             </button>

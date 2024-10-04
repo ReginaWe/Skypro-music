@@ -53,6 +53,9 @@ const authSlice = createSlice({
         state.tokens.access = "";
         state.tokens.refresh = "";
     },
+    setError: (state, action: PayloadAction<string>) => {
+state.user.error = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getLogin.fulfilled, (state, action) => {
@@ -83,5 +86,5 @@ const authSlice = createSlice({
 });
 
 export const checkUser = (state: RootState) => Boolean(state.auth.tokens.access)
-export const {logOut} = authSlice.actions;
+export const {logOut, setError} = authSlice.actions;
 export const authReducer = authSlice.reducer;

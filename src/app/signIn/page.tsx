@@ -4,7 +4,7 @@ import styles from "./signIn.module.css";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getLogin, getTokens } from "@/store/features/authSlice";
+import { getLogin, getTokens, setError } from "@/store/features/authSlice";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -35,7 +35,11 @@ export default function SignIn() {
 
     try {
       if (!formData.email || !formData.password) {
-        alert("Введите данные для входа");
+        dispatch(
+          setError(
+            "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+          )
+        );
         return;
       }
       await Promise.all([
@@ -45,6 +49,11 @@ export default function SignIn() {
       router.push("/tracks");
     } catch (error: unknown) {
       console.error("error");
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      } else {
+        dispatch(setError("Произошла ошибка, попробуйте позже"));
+      }
     }
   }
 
@@ -83,13 +92,15 @@ export default function SignIn() {
             />
             <p className={styles.errorBlock}>{error}</p>
             <button
-              onClick={handleLogIn}
               className={cn(styles.modalEnter, styles.gaped)}
+              type="button"
+              onClick={handleLogIn}
             >
               Войти
             </button>
             <button
               className={styles.modalAdditional}
+              type="button"
               onClick={handleOpenSigningUp}
             >
               Зарегистрироваться
