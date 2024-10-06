@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { RejectedErrorType } from "../types/user";
 
 export default function SignUp() {
   const error = useAppSelector((state) => state.auth.user.error);
@@ -37,44 +38,38 @@ export default function SignUp() {
   async function handleRegister(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
+    if (!formData.email || !formData.password || !formData.passwordTwo) {
+      dispatch(
+        setError(
+          "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+        )
+      );
+      return;
+    }
+    if (formData.password !== formData.passwordTwo) {
+      dispatch(setError("Оба пароля должны совпадать"));
+      return;
+    }
+
     try {
-      if (!formData.email || !formData.password || !formData.passwordTwo) {
+      await dispatch(getSignUp(formData)).unwrap();
+      await dispatch(getTokens(formData)).unwrap();
+      router.push("/tracks");
+    } catch (rejectedValueOrSerializedError: unknown) {
+      if (rejectedValueOrSerializedError instanceof Error) {
+        dispatch(setError(rejectedValueOrSerializedError.message));
+      } else if (
+        (rejectedValueOrSerializedError as RejectedErrorType).name === "Error"
+      ) {
         dispatch(
           setError(
-            "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+            (rejectedValueOrSerializedError as RejectedErrorType).message
           )
         );
-        return;
-      }
-      if (formData.password !== formData.passwordTwo) {
-        dispatch(setError("Оба пароля должны совпадать"));
-        return;
-      }
-      dispatch(getSignUp(formData))
-        .then((response) => {
-          if (response.ok) {
-            dispatch(getTokens(formData));
-          }
-        })
-        .then((response) => {
-          console.log("tokens:", response);
-        });
-      /*  await Promise.all([
-        dispatch(getSignUp(formData)).unwrap(),
-        dispatch(getTokens(formData)).unwrap(),
-      ]).then(([responseUser, responseTokens]) => {
-        if (responseUser.ok && !responseTokens.ok) {
-          dispatch(getTokens(formData)).unwrap();
-        }
-      }); */
-      router.push("/signIn");
-    } catch (error: unknown) {
-      console.error("error");
-      if (error instanceof Error) {
-        dispatch(setError(error.message));
       } else {
-        dispatch(setError("Произошла ошибка, попробуйте позже"));
+        dispatch(setError("Неизвестная ошибка"));
       }
+      console.log("error:", rejectedValueOrSerializedError);
     }
   }
   return (

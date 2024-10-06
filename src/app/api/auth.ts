@@ -29,7 +29,7 @@ export async function signUp({
   email: string;
   password: string;
 }) {
-  const data = await fetch(`${BASE_URL}signup/`, {
+  const response = await fetch(`${BASE_URL}signup/`, {
     method: "POST",
     body: JSON.stringify({ email, password, username: email,}),
     headers: {
@@ -37,10 +37,19 @@ export async function signUp({
     },
   });
 
-  if (data.ok) {
-    return await data.json();
+  const data = await response.json();
+
+  if (response.ok) {
+    return data;
   } else {
-    throw new Error("Ошибка при регистрации пользователя");
+    const errors = [data.message]
+
+    if (data.data && data.data.errors)
+      for (const key in data.data.errors) {
+        errors.push(data.data.errors[key])
+      }
+
+    throw new Error(errors.join("\n"));
   }
 }
 
