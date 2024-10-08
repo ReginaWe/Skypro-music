@@ -1,9 +1,11 @@
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
+import { CategoryDataType, TrackType } from "../types/tracks";
 
 const API_URL =
   "https://webdev-music-003b5b991590.herokuapp.com/catalog/track/all/";
 
 const BASE_URL = "https://webdev-music-003b5b991590.herokuapp.com/catalog/";
+const URL_Selection = "https://webdev-music-003b5b991590.herokuapp.com/catalog/selection/"
 
 export async function getTracks() {
   const res = await fetch(API_URL);
@@ -26,9 +28,31 @@ export async function likeTrack({
   refresh: string;
 }) {
   const res = await fetchWithAuth(
-    BASE_URL + `/track/${trackId}/favorite/`,
+    `${BASE_URL}/track/${trackId}/favorite/`,
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    },
+    refresh
+  );
+  return res.json();
+}
+
+export async function dislikeTrack({
+  trackId,
+  access,
+  refresh,
+}: {
+  trackId: number;
+  access: string;
+  refresh: string;
+}) {
+  const res = await fetchWithAuth(
+    BASE_URL + `/track/${trackId}/favorite/`,
+    {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${access}`,
       },
@@ -44,7 +68,7 @@ export async function fetchFavoriteTracks({
 }: {
   access: string;
   refresh: string;
-}) {
+}): Promise<TrackType[]> {
   const res = await fetchWithAuth(
     BASE_URL + `/track/favorite/all/`,
     {
@@ -55,5 +79,17 @@ export async function fetchFavoriteTracks({
     },
     refresh
   );
-  return res.json();
+  const data = await res.json();
+  return data.data;
+}
+
+export async function fetchSelectionTracks(id: string): Promise<CategoryDataType> {
+  const res = await fetch(URL_Selection + id);
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  const data = await res.json();
+  return data.data;
 }

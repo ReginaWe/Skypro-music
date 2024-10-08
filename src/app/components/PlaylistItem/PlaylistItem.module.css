@@ -93,6 +93,9 @@
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
+  &.active {
+    fill: #b672ff;
+  }
 }
 
 .trackTimeText {

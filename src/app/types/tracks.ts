@@ -12,3 +12,8 @@ export type TrackType = {
     track_file: string;
     stared_user: UserType[];
 }
+
+export type CategoryDataType = {
+    name: string,
+    items: number[],
+  }

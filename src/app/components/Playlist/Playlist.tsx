@@ -7,7 +7,7 @@ type PlaylistProps = {
   tracks: TrackType[];
 };
 
-export function Playlist({ tracks }: PlaylistProps) {
+export default function Playlist({ tracks }: PlaylistProps) {
   return (
     <div className={styles.centerblockContent}>
       <div className={styles.contentTitle}>
@@ -28,7 +28,7 @@ export function Playlist({ tracks }: PlaylistProps) {
       </div>
       <div className={styles.contentPlaylist}>
         {tracks.map((track) => (
-          <PlaylistItem key={track.id} track={track} tracks={tracks} />
+          <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))}
       </div>
     </div>
