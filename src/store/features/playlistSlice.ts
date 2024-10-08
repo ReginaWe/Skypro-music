@@ -18,6 +18,10 @@ type PlaylistStateType = {
   isPlaying: boolean;
   isShuffle: boolean;
   likedTracks: TrackType[];
+  filterOptions: {
+    authors: string[],
+    searchValue: string
+  }
   
 };
 
@@ -28,6 +32,10 @@ const initialState: PlaylistStateType = {
   isPlaying: false,
   isShuffle: false,
   likedTracks: [],
+  filterOptions: {
+    authors: [],
+    searchValue: "",
+  },
 };
 
 const playlistSlice = createSlice({
@@ -88,6 +96,12 @@ const playlistSlice = createSlice({
     setDislikeTrack: (state, action: PayloadAction<TrackType>) => {
       state.likedTracks = state.likedTracks.filter((track) => track._id !== action.payload._id);
     },
+    setFilters: (state, action: PayloadAction<{authors: string[], searchValue: string}>) => {
+      state.filterOptions = {
+        authors: action.payload.authors || state.filterOptions.authors,
+        searchValue: action.payload.searchValue || state.filterOptions.searchValue, 
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getFavoriteTracks.fulfilled, (state, action) => {
@@ -103,5 +117,6 @@ export const {
   setPrevTrack,
   setDislikeTrack,
   setLikeTrack,
+  setFilters,
 } = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;

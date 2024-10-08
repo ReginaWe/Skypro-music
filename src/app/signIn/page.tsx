@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { RejectedErrorType } from "../types/user";
 
 export default function SignIn() {
   const error = useAppSelector((state) => state.auth.user.error);
@@ -47,13 +48,21 @@ export default function SignIn() {
         dispatch(getTokens(formData)).unwrap(),
       ]);
       router.push("/tracks");
-    } catch (error: unknown) {
-      console.error("error");
-      if (error instanceof Error) {
-        dispatch(setError(error.message));
+    } catch (rejectedValueOrSerializedError: unknown) {
+      if (rejectedValueOrSerializedError instanceof Error) {
+        dispatch(setError(rejectedValueOrSerializedError.message));
+      } else if (
+        (rejectedValueOrSerializedError as RejectedErrorType).name === "Error"
+      ) {
+        dispatch(
+          setError(
+            (rejectedValueOrSerializedError as RejectedErrorType).message
+          )
+        );
       } else {
-        dispatch(setError("Произошла ошибка, попробуйте позже"));
+        dispatch(setError("Неизвестная ошибка"));
       }
+      console.log("error:", rejectedValueOrSerializedError);
     }
   }
 

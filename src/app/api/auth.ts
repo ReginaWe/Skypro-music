@@ -7,7 +7,7 @@ export async function login({
   email: string;
   password: string;
 }) {
-  const data = await fetch(`${BASE_URL}login/`, {
+  const response = await fetch(`${BASE_URL}login/`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -15,10 +15,19 @@ export async function login({
     },
   });
 
-  if (data.ok) {
-    return await data.json();
+  const data = await response.json();
+
+  if (response.ok) {
+    return data;
   } else {
-    throw new Error("Ошибка при получении информации о пользователе");
+    const errors = [data.message];
+
+    if (data.data && data.data.errors)
+      for (const key in data.data.errors) {
+        errors.push(data.data.errors[key]);
+      }
+
+    throw new Error(errors.join("\n"));
   }
 }
 
@@ -31,7 +40,7 @@ export async function signUp({
 }) {
   const response = await fetch(`${BASE_URL}signup/`, {
     method: "POST",
-    body: JSON.stringify({ email, password, username: email,}),
+    body: JSON.stringify({ email, password, username: email }),
     headers: {
       "content-type": "application/json",
     },
@@ -40,13 +49,13 @@ export async function signUp({
   const data = await response.json();
 
   if (response.ok) {
-    return data;
+    return data.result;
   } else {
-    const errors = [data.message]
+    const errors = [data.message];
 
     if (data.data && data.data.errors)
       for (const key in data.data.errors) {
-        errors.push(data.data.errors[key])
+        errors.push(data.data.errors[key]);
       }
 
     throw new Error(errors.join("\n"));
