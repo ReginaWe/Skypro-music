@@ -1,3 +1,5 @@
+"use client"
+
 import { useAppDispatch } from "@/hooks/hooks";
 import styles from "./SearchBar.module.css";
 import { ChangeEvent, useState } from "react";

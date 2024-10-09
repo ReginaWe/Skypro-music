@@ -34,10 +34,33 @@ export default function Playlist({ tracks }: PlaylistProps) {
         {/* {tracks.map((track) => (
           <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))} */}
-        {filteredTracks.map((track) => {
-          <PlaylistItem key={track._id} track={track} tracks={tracks} />;
-        })}
+        {filteredTracks.map((track: TrackType) => (
+          <PlaylistItem key={track._id} track={track} tracks={filteredTracks} />
+        ))}
       </div>
     </div>
   );
+}
+
+function Fn1() {} // function declaration
+const Fn2 = function () {} // function expression
+const Fn3 = () => {} // arrow function
+
+function Fn14() { return 0 }
+const Fn24 = function () { return 0 }
+const Fn34 = () => { return 0 }
+const Fn35 = () => 0
+const Fn36 = () => { return (0) }
+const Fn37 = () => (
+  0
+)
+
+const Fn38 = () => (
+  console.log("object")
+)
+
+const obj = {
+  fn2: function () {},
+  fn3: () => {},
+  fn4() {},
 }

@@ -47,10 +47,10 @@ const playlistSlice = createSlice({
   reducers: {
     setInitialTracks: (
       state,
-      action: PayloadAction<{ initialTracks: TrackType[] }>
+      action: PayloadAction<{ tracks: TrackType[] }>
     ) => {
-      state.initialTracks = action.payload.initialTracks;
-      state.filteredTracks = action.payload.initialTracks
+      state.initialTracks = action.payload.tracks;
+      state.filteredTracks = action.payload.tracks;
     },
     setCurrentTrack: (
       state,
@@ -122,11 +122,12 @@ const playlistSlice = createSlice({
         const isAuthors = hasAuthors
           ? state.filterOptions.author.includes(track.author)
           : true;
-          const hasSearchValue = track.name.toLowerCase().includes(state.filterOptions.searchValue.toLowerCase())
+        const hasSearchValue = track.name
+          .toLowerCase()
+          .includes(state.filterOptions.searchValue.toLowerCase());
         return isAuthors && hasSearchValue;
 
         //1.53
-      
       });
     },
   },

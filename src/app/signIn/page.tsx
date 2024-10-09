@@ -67,6 +67,7 @@ export default function SignIn() {
   }
 
   function handleOpenSigningUp() {
+    dispatch(setError(""));
     router.replace("/signUp");
   }
 
