@@ -2,12 +2,16 @@ import { TrackType } from "@/app/types/tracks";
 import PlaylistItem from "../PlaylistItem/PlaylistItem";
 import styles from "./Playlist.module.css";
 import classNames from "classnames";
+import { useAppSelector } from "@/hooks/hooks";
 
 type PlaylistProps = {
   tracks: TrackType[];
 };
 
 export default function Playlist({ tracks }: PlaylistProps) {
+  const filteredTracks = useAppSelector(
+    (state) => state.playlist.filteredTracks
+  );
   return (
     <div className={styles.centerblockContent}>
       <div className={styles.contentTitle}>
@@ -27,9 +31,12 @@ export default function Playlist({ tracks }: PlaylistProps) {
         </div>
       </div>
       <div className={styles.contentPlaylist}>
-        {tracks.map((track) => (
+        {/* {tracks.map((track) => (
           <PlaylistItem key={track._id} track={track} tracks={tracks} />
-        ))}
+        ))} */}
+        {filteredTracks.map((track) => {
+          <PlaylistItem key={track._id} track={track} tracks={tracks} />;
+        })}
       </div>
     </div>
   );
