@@ -1,12 +1,14 @@
 "use client";
+import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./Sidebar.module.css";
 import { useInitFavorites } from "@/hooks/useInitFavorites";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { logOut } from "@/store/features/authSlice";
-import Link from "next/link";
 
-const Sidebar = () => {
+
+const Sidebar = React.memo(() => {
   useInitFavorites();
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.auth.user.username);
@@ -64,6 +66,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-};
-
+});
+Sidebar.displayName = "Sidebar";
 export default Sidebar;

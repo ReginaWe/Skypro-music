@@ -16,4 +16,6 @@ export type TrackType = {
 export type CategoryDataType = {
     name: string,
     items: number[],
-  }
+}
+
+export type SortOptions = "" | "возр" | "убыв"

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setFilters } from "@/store/features/playlistSlice";
 
 type FilterItemProps = {
+  filterName: string;
   title: string;
   list: string[];
   isActive: boolean;
@@ -11,6 +12,7 @@ type FilterItemProps = {
 };
 
 export function FilterItem({
+  filterName,
   title,
   list,
   isActive,
@@ -18,16 +20,25 @@ export function FilterItem({
 }: FilterItemProps) {
   const dispatch = useAppDispatch();
   const optionList = useAppSelector(
-    (state) => state.playlist.filterOptions.author
+    (state) => state.playlist.filterOptions[filterName]
   );
   function toggleFilter(item: string) {
-    dispatch(
-      setFilters({
-        author: optionList.includes(item)
-          ? optionList.filter((el) => el !== item)
-          : [...optionList, item],
-      })
-    );
+    console.log(filterName, item);
+    if (filterName === "author" || filterName === "genre") {
+      dispatch(
+        setFilters({
+          [filterName]: optionList.includes(item)
+            ? optionList.filter((el: string) => el !== item)
+            : [...optionList, item],
+        })
+      );
+    } else {
+      dispatch(
+        setFilters({
+          year: item === "По умолчанию" ? "" : item === "Сначала новые" ? "убыв" : "возр"
+        })
+      );
+    }
   }
   return (
     <div className={styles.filterWrapper}>

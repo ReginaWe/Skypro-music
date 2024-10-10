@@ -27,18 +27,21 @@ export function Filter({ tracks }: FilterProps) {
     <div className={styles.centerblockFilter}>
       <div className={styles.filterTitle}>Искать по:</div>
       <FilterItem
+        filterName="author"
         title={"исполнителю"}
         isActive={activeFilter === "исполнителю"}
         list={getUniqueAuthors}
         handleFilter={handleFilter}
       />
       <FilterItem
+        filterName="year"
         title={"году выпуска"}
         isActive={activeFilter === "году выпуска"}
         list={SORT_OPTIONS}
         handleFilter={handleFilter}
       />
       <FilterItem
+        filterName="genre"
         title={"жанру"}
         isActive={activeFilter === "жанру"}
         list={getUniqueGenre}

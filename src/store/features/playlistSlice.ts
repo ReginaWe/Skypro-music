@@ -1,5 +1,5 @@
 import { fetchFavoriteTracks } from "@/app/api/tracks";
-import { TrackType } from "@/app/types/tracks";
+import { SortOptions, TrackType } from "@/app/types/tracks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { act } from "react";
 
@@ -20,6 +20,8 @@ type PlaylistStateType = {
   likedTracks: TrackType[];
   filterOptions: {
     author: string[];
+    year: SortOptions;
+    genre: string[];
     searchValue: string;
   };
   filteredTracks: TrackType[];
@@ -35,6 +37,8 @@ const initialState: PlaylistStateType = {
   likedTracks: [],
   filterOptions: {
     author: [],
+    year: "",
+    genre: [],
     searchValue: "",
   },
   filteredTracks: [],
@@ -110,25 +114,47 @@ const playlistSlice = createSlice({
     },
     setFilters: (
       state,
-      action: PayloadAction<{ author?: string[]; searchValue?: string }>
+      action: PayloadAction<{
+        author?: string[];
+        searchValue?: string;
+        year?: SortOptions;
+        genre?: string[];
+      }>
     ) => {
       state.filterOptions = {
         author: action.payload.author || state.filterOptions.author,
         searchValue:
           action.payload.searchValue || state.filterOptions.searchValue,
+        year: action.payload.year || state.filterOptions.year,
+        genre: action.payload.genre || state.filterOptions.genre,
       };
       state.filteredTracks = state.initialTracks.filter((track) => {
         const hasAuthors = state.filterOptions.author.length !== 0;
         const isAuthors = hasAuthors
           ? state.filterOptions.author.includes(track.author)
           : true;
+        const hasGenres = state.filterOptions.genre.length !== 0;
+        const isGenres = hasGenres
+          ? state.filterOptions.genre.includes(track.genre)
+          : true;
+
         const hasSearchValue = track.name
           .toLowerCase()
           .includes(state.filterOptions.searchValue.toLowerCase());
-        return isAuthors && hasSearchValue;
-
-        //1.53
+        return isAuthors && isGenres && hasSearchValue;
       });
+      if (state.filterOptions.year) {
+        state.filteredTracks.sort((a, b) => {
+          const delta =
+            new Date(a.release_date).getTime() -
+            new Date(b.release_date).getTime();
+          if (state.filterOptions.year === "убыв") {
+            return -delta;
+          } else {
+            return delta;
+          }
+        });
+      }
     },
   },
   extraReducers: (builder) => {

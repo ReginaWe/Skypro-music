@@ -42,9 +42,9 @@ export default function Playlist({ tracks }: PlaylistProps) {
   );
 }
 
-function Fn1() {} // function declaration
-const Fn2 = function () {} // function expression
-const Fn3 = () => {} // arrow function
+function Fn1() {} // => undefined // function declaration
+const Fn2 = function () {} // => undefined // function expression
+const Fn3 = () => {} // => undefined // arrow function
 
 function Fn14() { return 0 }
 const Fn24 = function () { return 0 }
@@ -56,11 +56,27 @@ const Fn37 = () => (
 )
 
 const Fn38 = () => (
-  console.log("object")
+  console.log("object") // => undefined
 )
 
 const obj = {
-  fn2: function () {},
-  fn3: () => {},
-  fn4() {},
+  fn2: function () {}, // => undefined
+  fn3: () => {}, // => undefined
+  fn4() {}, // => undefined
 }
+
+// classes
+
+class Tst {
+  x: number = 0
+
+  constructor(_x: number = 0) {
+    this.x = 1
+  }
+
+  fn4() {} // => undefined
+}
+
+const tst1 = new Tst()
+const tst2 = new Tst(5)
+tst2.fn4()

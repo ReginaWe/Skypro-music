@@ -67,7 +67,7 @@ const Player = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = Number(e.target.value);
     }
-  }, []);
+  }, [audioRef]);
   
   if (!currentTrack) {
     return null;
