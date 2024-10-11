@@ -2,6 +2,7 @@ import classNames from "classnames";
 import styles from "../Filter.module.css";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setFilters } from "@/store/features/playlistSlice";
+import { SortOptions } from "@/app/types/tracks";
 
 type FilterItemProps = {
   filterName: string;
@@ -10,6 +11,12 @@ type FilterItemProps = {
   isActive: boolean;
   handleFilter: (value: string) => void;
 };
+
+const sortKeys: Record<SortOptions, string> = {
+  "": "По умолчанию",
+  "возр": "Сначала старые",
+  "убыв": "Сначала новые",
+}
 
 export function FilterItem({
   filterName,
@@ -44,17 +51,23 @@ export function FilterItem({
     <div className={styles.filterWrapper}>
       <div
         onClick={() => handleFilter(title)}
-        className={classNames(styles.filterButton, styles._btnText)}
+        className={classNames(styles.filterButton, styles._btnText, {[styles.active] : optionList.length})}
       >
         {title}
       </div>
+      {Boolean(optionList.length && (filterName === "author" || filterName === "genre")) 
+      && (<div className={styles.filterNumber}>
+        {optionList.length}
+      </div>)}
       {isActive && (
         <div className={styles.filterListContainer}>
           <ul className={styles.filterList}>
             {list.map((item, index) => (
               <li
                 onClick={() => toggleFilter(item)}
-                className={styles.filterItem}
+                className={classNames(styles.filterItem, {
+                  [styles.active]: optionList.length && optionList.includes(item) || sortKeys[optionList as SortOptions] === item // optionList === "" && item === "По умолчанию" || optionList === "возр" && item === "Сначала старые" || optionList === "убыв" && item === "Сначала новые"
+                })}
                 key={index}
               >
                 {item}

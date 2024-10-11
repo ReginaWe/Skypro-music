@@ -125,7 +125,10 @@ const playlistSlice = createSlice({
         author: action.payload.author || state.filterOptions.author,
         searchValue:
           action.payload.searchValue || state.filterOptions.searchValue,
-        year: action.payload.year || state.filterOptions.year,
+        year:
+          action.payload.year === ""
+            ? ""
+            : action.payload.year || state.filterOptions.year,
         genre: action.payload.genre || state.filterOptions.genre,
       };
       state.filteredTracks = state.initialTracks.filter((track) => {

@@ -75,6 +75,10 @@
     color: #ad61ff;
     text-decoration: underline;
   }
+  &.active {
+    color: #ad61ff;
+    font-weight: 500;
+  }
 }
 
 ._btnText:hover {
@@ -102,4 +106,25 @@
   &:hover {
     color: #ad61ff;
   }
+  &.active {
+    color: #ad61ff;
+    border-color: #ad61ff;
+  }
+}
+
+.filterNumber {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  height: 26px;
+  width: 26px;
+  font-family: StratosSkyeng;
+  font-size: 13px;
+  line-height: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background-color: #ad61ff;
+  border-radius: 13px;
 }
