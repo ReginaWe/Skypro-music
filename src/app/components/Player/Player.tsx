@@ -66,7 +66,7 @@ const Player = () => {
   if (!currentTrack) {
     return null;
   }
-  const { name, author, track_file } = currentTrack;
+  const { name, author, track_file, _id } = currentTrack;
 
   const duration = audioRef.current?.duration || 0;
 
@@ -165,7 +165,7 @@ const Player = () => {
                 </svg>
               </div>
             </div>
-            <TrackPlay name={name} author={author} />
+            <TrackPlay track={currentTrack}/>
           </div>
           <Volume audioRef={audioRef} />
           <span className={styles.barTimers}>
