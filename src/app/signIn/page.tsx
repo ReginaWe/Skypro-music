@@ -4,19 +4,19 @@ import styles from "./signIn.module.css";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getLogin, getTokens } from "@/store/features/authSlice";
+import { getLogin, getTokens, setError } from "@/store/features/authSlice";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { RejectedErrorType } from "../types/user";
 
 export default function SignIn() {
-  const error = useAppSelector((state) => state.error);
+  const error = useAppSelector((state) => state.auth.user.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
   const [formData, setFormData] = useState({ email: "", password: "" });
-
 
   useEffect(() => {
     if (tokens.access) {
@@ -36,7 +36,11 @@ export default function SignIn() {
 
     try {
       if (!formData.email || !formData.password) {
-        alert("Введите данные для входа");
+        dispatch(
+          setError(
+            "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+          )
+        );
         return;
       }
       await Promise.all([
@@ -44,12 +48,26 @@ export default function SignIn() {
         dispatch(getTokens(formData)).unwrap(),
       ]);
       router.push("/tracks");
-    } catch (error: unknown) {
-      console.error("error");
+    } catch (rejectedValueOrSerializedError: unknown) {
+      if (rejectedValueOrSerializedError instanceof Error) {
+        dispatch(setError(rejectedValueOrSerializedError.message));
+      } else if (
+        (rejectedValueOrSerializedError as RejectedErrorType).name === "Error"
+      ) {
+        dispatch(
+          setError(
+            (rejectedValueOrSerializedError as RejectedErrorType).message
+          )
+        );
+      } else {
+        dispatch(setError("Неизвестная ошибка"));
+      }
+      console.log("error:", rejectedValueOrSerializedError);
     }
   }
 
   function handleOpenSigningUp() {
+    dispatch(setError(""));
     router.replace("/signUp");
   }
 
@@ -82,14 +100,19 @@ export default function SignIn() {
               placeholder="Пароль"
               className={styles.modalInput}
             />
-            <p className={styles.error}>{error && error}</p>
+            <p className={styles.errorBlock}>{error}</p>
             <button
-              onClick={handleLogIn}
               className={cn(styles.modalEnter, styles.gaped)}
+              type="button"
+              onClick={handleLogIn}
             >
               Войти
             </button>
-            <button className={styles.modalAdditional} onClick={handleOpenSigningUp}>
+            <button
+              className={styles.modalAdditional}
+              type="button"
+              onClick={handleOpenSigningUp}
+            >
               Зарегистрироваться
             </button>
           </form>

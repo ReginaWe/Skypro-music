@@ -1,10 +1,10 @@
 import { fetchFavoriteTracks } from "@/app/api/tracks";
 import { TrackType } from "@/app/types/tracks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { act } from "react";
 
 export const getFavoriteTracks = createAsyncThunk(
   "playlist/getFavoriteTracks",
-  //указать что это объект с 2 полями
   async (tokens: any) => {
     const favoriteTracks = await fetchFavoriteTracks(tokens);
     return favoriteTracks;
@@ -18,6 +18,12 @@ type PlaylistStateType = {
   isPlaying: boolean;
   isShuffle: boolean;
   likedTracks: TrackType[];
+  filterOptions: {
+    author: string[];
+    searchValue: string;
+  };
+  filteredTracks: TrackType[];
+  initialTracks: TrackType[];
 };
 
 const initialState: PlaylistStateType = {
@@ -27,12 +33,25 @@ const initialState: PlaylistStateType = {
   isPlaying: false,
   isShuffle: false,
   likedTracks: [],
+  filterOptions: {
+    author: [],
+    searchValue: "",
+  },
+  filteredTracks: [],
+  initialTracks: [],
 };
 
 const playlistSlice = createSlice({
   name: "playlist",
   initialState,
   reducers: {
+    setInitialTracks: (
+      state,
+      action: PayloadAction<{ tracks: TrackType[] }>
+    ) => {
+      state.initialTracks = action.payload.tracks;
+      state.filteredTracks = action.payload.tracks;
+    },
     setCurrentTrack: (
       state,
       action: PayloadAction<{ track: TrackType; tracks: TrackType[] }>
@@ -85,7 +104,31 @@ const playlistSlice = createSlice({
       state.likedTracks.push(action.payload);
     },
     setDislikeTrack: (state, action: PayloadAction<TrackType>) => {
-      state.likedTracks = state.likedTracks.filter((track) => track._id !== action.payload._id);
+      state.likedTracks = state.likedTracks.filter(
+        (track) => track._id !== action.payload._id
+      );
+    },
+    setFilters: (
+      state,
+      action: PayloadAction<{ author?: string[]; searchValue?: string }>
+    ) => {
+      state.filterOptions = {
+        author: action.payload.author || state.filterOptions.author,
+        searchValue:
+          action.payload.searchValue || state.filterOptions.searchValue,
+      };
+      state.filteredTracks = state.initialTracks.filter((track) => {
+        const hasAuthors = state.filterOptions.author.length !== 0;
+        const isAuthors = hasAuthors
+          ? state.filterOptions.author.includes(track.author)
+          : true;
+        const hasSearchValue = track.name
+          .toLowerCase()
+          .includes(state.filterOptions.searchValue.toLowerCase());
+        return isAuthors && hasSearchValue;
+
+        //1.53
+      });
     },
   },
   extraReducers: (builder) => {
@@ -95,6 +138,7 @@ const playlistSlice = createSlice({
   },
 });
 export const {
+  setInitialTracks,
   setCurrentTrack,
   setNextTrack,
   setIsPlaying,
@@ -102,5 +146,6 @@ export const {
   setPrevTrack,
   setDislikeTrack,
   setLikeTrack,
+  setFilters,
 } = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;

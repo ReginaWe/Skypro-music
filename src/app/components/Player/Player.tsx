@@ -3,7 +3,7 @@ import Volume from "../Volume/Volume";
 import styles from "./Player.module.css";
 import classNames from "classnames";
 import { TrackPlay } from "../TrackPlay/TrackPlay";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { printTime } from "@/utils/datetime";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -63,6 +63,12 @@ const Player = () => {
     currentAudio.play();
   }, [currentTrack]);
 
+  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Number(e.target.value);
+    }
+  }, []);
+  
   if (!currentTrack) {
     return null;
   }
@@ -70,11 +76,7 @@ const Player = () => {
 
   const duration = audioRef.current?.duration || 0;
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = Number(e.target.value);
-    }
-  };
+  
   //Функция воспроизведения и паузы трека
   const togglePlay = () => {
     const audio = audioRef.current;

@@ -4,14 +4,15 @@ import styles from "./signUp.module.css";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { getSignUp, getTokens } from "@/store/features/authSlice";
+import { getSignUp, getTokens, setError } from "@/store/features/authSlice";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { RejectedErrorType } from "../types/user";
 
 export default function SignUp() {
-  const error = useAppSelector((state) => state.error);
+  const error = useAppSelector((state) => state.auth.user.error);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.auth.tokens);
@@ -37,19 +38,38 @@ export default function SignUp() {
   async function handleRegister(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
+    if (!formData.email || !formData.password || !formData.passwordTwo) {
+      dispatch(
+        setError(
+          "Вы ничего не ввели, невозможно продолжить запрос с пустыми полями"
+        )
+      );
+      return;
+    }
+    if (formData.password !== formData.passwordTwo) {
+      dispatch(setError("Оба пароля должны совпадать"));
+      return;
+    }
+
     try {
-      if (!formData.email || !formData.password || !formData.passwordTwo) {
-        alert("Введите данные для входа");
-        return;
+      await dispatch(getSignUp(formData)).unwrap();
+      await dispatch(getTokens(formData)).unwrap();
+      router.push("/tracks");
+    } catch (rejectedValueOrSerializedError: unknown) {
+      if (rejectedValueOrSerializedError instanceof Error) {
+        dispatch(setError(rejectedValueOrSerializedError.message));
+      } else if (
+        (rejectedValueOrSerializedError as RejectedErrorType).name === "Error"
+      ) {
+        dispatch(
+          setError(
+            (rejectedValueOrSerializedError as RejectedErrorType).message
+          )
+        );
+      } else {
+        dispatch(setError("Неизвестная ошибка"));
       }
-      if (formData.password !== formData.passwordTwo) {
-        return alert("Оба пароля должны совпадать");
-      }
-      await dispatch(getSignUp(formData));/* 
-      await dispatch(getTokens(formData)); */
-      router.push("/signIn");
-    } catch (error: unknown) {
-      console.error("error");
+      console.log("error:", rejectedValueOrSerializedError);
     }
   }
   return (
@@ -89,10 +109,11 @@ export default function SignUp() {
               placeholder="Повторите пароль"
               className={styles.modalInput}
             />
-            <p className={styles.error}>{error && error}</p>
+            <p className={styles.errorBlock}>{error}</p>
             <button
-              onClick={handleRegister}
               className={cn(styles.modalEnter, styles.gaped)}
+              type="button"
+              onClick={handleRegister}
             >
               Зарегистрироваться
             </button>
