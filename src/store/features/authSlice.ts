@@ -1,7 +1,5 @@
 import * as API from "@/app/api/auth";
-import { useAppSelector } from "@/hooks/hooks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { WritableDraft} from "immer";
 import type { RootState } from "../store";
 
 export const getLogin = createAsyncThunk("auth/getLogin",API.login);
@@ -23,6 +21,9 @@ type AuthStateType = {
     refresh: string;
   };
 };
+
+export type TokensType = AuthStateType["tokens"]
+
 
 const initialState: AuthStateType = {
     user: {

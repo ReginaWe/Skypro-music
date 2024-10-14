@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import { useAppDispatch } from "@/hooks/hooks";
 import styles from "./SearchBar.module.css";
 import { ChangeEvent, useState } from "react";
-import { setFilters } from "@/store/features/playlistSlice";
+import { setFilters } from "@/store/features/playerSlice";
 
 export default function SearchBar() {
   const dispatch = useAppDispatch();

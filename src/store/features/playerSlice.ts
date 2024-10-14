@@ -1,52 +1,55 @@
 import { fetchFavoriteTracks } from "@/app/api/tracks";
 import { SortOptions, TrackType } from "@/app/types/tracks";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { act } from "react";
+import { TokensType } from "./authSlice";
 
 export const getFavoriteTracks = createAsyncThunk(
-  "playlist/getFavoriteTracks",
-  async (tokens: any) => {
+  "player/getFavoriteTracks",
+  async (tokens: TokensType) => {
     const favoriteTracks = await fetchFavoriteTracks(tokens);
     return favoriteTracks;
   }
 );
 
-type PlaylistStateType = {
+type PlayerStateType = {
   currentTrack: null | TrackType;
-  playlist: TrackType[];
-  shuffledPlaylist: TrackType[];
+  initialTracks: TrackType[]; // all
+  likedTracks: TrackType[]; // favorites
+  visibleTracks: TrackType[];
+  filteredTracks: TrackType[]; // visible + filters + sort
+  soundPlaylist: TrackType[]; // active / playing
+  shuffledPlaylist: TrackType[]; // active + shuffle
+  categoryName: string;
   isPlaying: boolean;
   isShuffle: boolean;
-  likedTracks: TrackType[];
   filterOptions: {
     author: string[];
     year: SortOptions;
     genre: string[];
     searchValue: string;
   };
-  filteredTracks: TrackType[];
-  initialTracks: TrackType[];
 };
 
-const initialState: PlaylistStateType = {
+const initialState: PlayerStateType = {
   currentTrack: null,
-  playlist: [],
+  initialTracks: [],
+  likedTracks: [],
+  visibleTracks: [],
+  filteredTracks: [],
+  soundPlaylist: [],
   shuffledPlaylist: [],
   isPlaying: false,
   isShuffle: false,
-  likedTracks: [],
+  categoryName: "",
   filterOptions: {
     author: [],
     year: "",
     genre: [],
     searchValue: "",
   },
-  filteredTracks: [],
-  initialTracks: [],
 };
-
-const playlistSlice = createSlice({
-  name: "playlist",
+const playerSlice = createSlice({
+  name: "player",
   initialState,
   reducers: {
     setInitialTracks: (
@@ -54,6 +57,14 @@ const playlistSlice = createSlice({
       action: PayloadAction<{ tracks: TrackType[] }>
     ) => {
       state.initialTracks = action.payload.tracks;
+      state.visibleTracks = action.payload.tracks;
+      state.filteredTracks = action.payload.tracks;
+    },
+    setVisibleTracks: (
+      state,
+      action: PayloadAction<{ tracks: TrackType[] }>
+    ) => {
+      state.visibleTracks = action.payload.tracks;
       state.filteredTracks = action.payload.tracks;
     },
     setCurrentTrack: (
@@ -61,7 +72,7 @@ const playlistSlice = createSlice({
       action: PayloadAction<{ track: TrackType; tracks: TrackType[] }>
     ) => {
       state.currentTrack = action.payload.track;
-      state.playlist = action.payload.tracks;
+      state.soundPlaylist = action.payload.tracks;
       state.shuffledPlaylist = [...action.payload.tracks].sort(
         () => 0.5 - Math.random()
       );
@@ -69,7 +80,7 @@ const playlistSlice = createSlice({
     setNextTrack: (state) => {
       const playlist = state.isShuffle
         ? state.shuffledPlaylist
-        : state.playlist;
+        : state.soundPlaylist;
       const currentTrackIndex = playlist.findIndex(
         (track) => track._id === state.currentTrack?._id
       );
@@ -81,7 +92,7 @@ const playlistSlice = createSlice({
     setPrevTrack: (state) => {
       const playlist = state.isShuffle
         ? state.shuffledPlaylist
-        : state.playlist;
+        : state.soundPlaylist;
       const currentTrackIndex = playlist.findIndex(
         (track) => track._id === state.currentTrack?._id
       );
@@ -112,6 +123,9 @@ const playlistSlice = createSlice({
         (track) => track._id !== action.payload._id
       );
     },
+    setCategoryName: (state, action: PayloadAction<string>) => {
+      state.categoryName = action.payload;
+    },
     setFilters: (
       state,
       action: PayloadAction<{
@@ -131,14 +145,18 @@ const playlistSlice = createSlice({
             : action.payload.year || state.filterOptions.year,
         genre: action.payload.genre || state.filterOptions.genre,
       };
-      state.filteredTracks = state.initialTracks.filter((track) => {
+      console.log(state.filterOptions.genre);
+      state.filteredTracks = state.visibleTracks.filter((track) => {
         const hasAuthors = state.filterOptions.author.length !== 0;
         const isAuthors = hasAuthors
           ? state.filterOptions.author.includes(track.author)
           : true;
         const hasGenres = state.filterOptions.genre.length !== 0;
         const isGenres = hasGenres
-          ? state.filterOptions.genre.includes(track.genre)
+          ? track.genre.reduce(
+              (acc, item) => acc || state.filterOptions.genre.includes(item),
+              false
+            )
           : true;
 
         const hasSearchValue = track.name
@@ -168,6 +186,7 @@ const playlistSlice = createSlice({
 });
 export const {
   setInitialTracks,
+  setVisibleTracks,
   setCurrentTrack,
   setNextTrack,
   setIsPlaying,
@@ -175,6 +194,7 @@ export const {
   setPrevTrack,
   setDislikeTrack,
   setLikeTrack,
+  setCategoryName,
   setFilters,
-} = playlistSlice.actions;
-export const playlistReducer = playlistSlice.reducer;
+} = playerSlice.actions;
+export const playerReducer = playerSlice.reducer;

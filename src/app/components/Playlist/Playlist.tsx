@@ -1,3 +1,4 @@
+"use client";
 import { TrackType } from "@/app/types/tracks";
 import PlaylistItem from "../PlaylistItem/PlaylistItem";
 import styles from "./Playlist.module.css";
@@ -9,9 +10,9 @@ type PlaylistProps = {
 };
 
 export default function Playlist({ tracks }: PlaylistProps) {
-  const filteredTracks = useAppSelector(
-    (state) => state.playlist.filteredTracks
-  );
+  /*  const filteredTracks = useAppSelector(
+    (state) => state.player.filteredTracks
+  ); */
   return (
     <div className={styles.centerblockContent}>
       <div className={styles.contentTitle}>
@@ -34,15 +35,15 @@ export default function Playlist({ tracks }: PlaylistProps) {
         {/* {tracks.map((track) => (
           <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))} */}
-        {filteredTracks.map((track: TrackType) => (
-          <PlaylistItem key={track._id} track={track} tracks={filteredTracks} />
+        {tracks.map((track: TrackType) => (
+          <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))}
       </div>
     </div>
   );
 }
 
-function Fn1() {} // => undefined // function declaration
+/* function Fn1() {} // => undefined // function declaration
 const Fn2 = function () {} // => undefined // function expression
 const Fn3 = () => {} // => undefined // arrow function
 
@@ -79,4 +80,4 @@ class Tst {
 
 const tst1 = new Tst()
 const tst2 = new Tst(5)
-tst2.fn4()
+tst2.fn4() */

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import styles from "../Filter.module.css";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { setFilters } from "@/store/features/playlistSlice";
+import { setFilters } from "@/store/features/playerSlice";
 import { SortOptions } from "@/app/types/tracks";
 
 type FilterItemProps = {
@@ -14,9 +14,9 @@ type FilterItemProps = {
 
 const sortKeys: Record<SortOptions, string> = {
   "": "По умолчанию",
-  "возр": "Сначала старые",
-  "убыв": "Сначала новые",
-}
+  возр: "Сначала старые",
+  убыв: "Сначала новые",
+};
 
 export function FilterItem({
   filterName,
@@ -27,7 +27,7 @@ export function FilterItem({
 }: FilterItemProps) {
   const dispatch = useAppDispatch();
   const optionList = useAppSelector(
-    (state) => state.playlist.filterOptions[filterName]
+    (state) => state.player.filterOptions[filterName]
   );
   function toggleFilter(item: string) {
     console.log(filterName, item);
@@ -42,7 +42,12 @@ export function FilterItem({
     } else {
       dispatch(
         setFilters({
-          year: item === "По умолчанию" ? "" : item === "Сначала новые" ? "убыв" : "возр"
+          year:
+            item === "По умолчанию"
+              ? ""
+              : item === "Сначала новые"
+              ? "убыв"
+              : "возр",
         })
       );
     }
@@ -51,14 +56,15 @@ export function FilterItem({
     <div className={styles.filterWrapper}>
       <div
         onClick={() => handleFilter(title)}
-        className={classNames(styles.filterButton, styles._btnText, {[styles.active] : optionList.length})}
+        className={classNames(styles.filterButton, styles._btnText, {
+          [styles.active]: optionList.length,
+        })}
       >
         {title}
       </div>
-      {Boolean(optionList.length && (filterName === "author" || filterName === "genre")) 
-      && (<div className={styles.filterNumber}>
-        {optionList.length}
-      </div>)}
+      {Boolean(
+        optionList.length && (filterName === "author" || filterName === "genre")
+      ) && <div className={styles.filterNumber}>{optionList.length}</div>}
       {isActive && (
         <div className={styles.filterListContainer}>
           <ul className={styles.filterList}>
@@ -66,7 +72,9 @@ export function FilterItem({
               <li
                 onClick={() => toggleFilter(item)}
                 className={classNames(styles.filterItem, {
-                  [styles.active]: optionList.length && optionList.includes(item) || sortKeys[optionList as SortOptions] === item // optionList === "" && item === "По умолчанию" || optionList === "возр" && item === "Сначала старые" || optionList === "убыв" && item === "Сначала новые"
+                  [styles.active]:
+                    (optionList.length && optionList.includes(item)) ||
+                    sortKeys[optionList as SortOptions] === item, // optionList === "" && item === "По умолчанию" || optionList === "возр" && item === "Сначала старые" || optionList === "убыв" && item === "Сначала новые"
                 })}
                 key={index}
               >
