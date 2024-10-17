@@ -22,7 +22,7 @@ const Sidebar = React.memo(() => {
           <p className={styles.sidebarPersonalName}>{username}</p>
           <div className={styles.sidebarIcon} onClick={handleQuit}>
             <svg>
-              <use xlinkHref="img/icon/sprite.svg#logout" />
+              <use xlinkHref="/img/icon/sprite.svg#logout" />
             </svg>
           </div>
         </div>

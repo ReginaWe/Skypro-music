@@ -35,11 +35,11 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
                   [styles.active]: isPlaying,
                 })}
               >
-                <use xlinkHref="img/icon/sprite.svg#icon-playingTrack"></use>
+                <use xlinkHref="/img/icon/sprite.svg#icon-playingTrack"></use>
               </svg>
             ) : (
               <svg className={styles.trackTitleSvg}>
-                <use xlinkHref="img/icon/sprite.svg#icon-note" />
+                <use xlinkHref="/img/icon/sprite.svg#icon-note" />
               </svg>
             )}
           </div>
@@ -61,7 +61,7 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
               [styles.active]: isLiked,
             })}
           >
-            <use xlinkHref="img/icon/sprite.svg#icon-like" />
+            <use xlinkHref="/img/icon/sprite.svg#icon-like" />
           </svg>
           <span className={styles.trackTimeText}>
             {printTime(duration_in_seconds)}

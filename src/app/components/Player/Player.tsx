@@ -122,7 +122,7 @@ const Player = () => {
             <div className={styles.playerControls}>
               <div onClick={handlePrevTrack} className={styles.playerBtnPrev}>
                 <svg className={styles.playerBtnPrevSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-prev" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-prev" />
                 </svg>
               </div>
               <div
@@ -131,17 +131,17 @@ const Player = () => {
               >
                 {isPlaying ? (
                   <svg className={styles.playerBtnPlaySvg}>
-                    <use xlinkHref="img/icon/sprite.svg#icon-pause" />
+                    <use xlinkHref="/img/icon/sprite.svg#icon-pause" />
                   </svg>
                 ) : (
                   <svg className={styles.playerBtnPlaySvg}>
-                    <use xlinkHref="img/icon/sprite.svg#icon-play" />
+                    <use xlinkHref="/img/icon/sprite.svg#icon-play" />
                   </svg>
                 )}
               </div>
               <div onClick={handleNextTrack} className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-next" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-next" />
                 </svg>
               </div>
               <div
@@ -151,7 +151,7 @@ const Player = () => {
                 onClick={repeatTrack}
               >
                 <svg className={classNames(styles.playerBtnRepeatSvg)}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-repeat" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-repeat" />
                 </svg>
               </div>
               <div
@@ -165,7 +165,7 @@ const Player = () => {
                 )}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-shuffle" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-shuffle" />
                 </svg>
               </div>
             </div>
