@@ -29,9 +29,13 @@ export default function Favorites() {
 
   doRedirectIfNeeds();
 
-  useEffect(() => {
+  /*  useEffect(() => {
     dispatch(setVisibleTracks({tracks: likedTracks}));
-  }, []);
+  }, []); */
+
+  useEffect(() => {
+    dispatch(setVisibleTracks({ tracks: likedTracks }));
+  }, [likedTracks]);
 
   if (!visibleTracks.length) {
     return <p>ошибка</p>;
