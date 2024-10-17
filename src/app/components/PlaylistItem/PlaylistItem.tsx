@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { printTime } from "../../../utils/datetime";
 import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { setCurrentTrack } from "@/store/features/playlistSlice";
+import { setCurrentTrack } from "@/store/features/playerSlice";
 import useLikeTrack from "@/hooks/useLikeTrack";
 
 type TrackProps = {
@@ -14,7 +14,7 @@ type TrackProps = {
 };
 
 export function PlaylistItem({ track, tracks }: TrackProps) {
-  const { currentTrack, isPlaying } = useAppSelector((state) => state.playlist);
+  const { currentTrack, isPlaying } = useAppSelector((state) => state.player);
   /* const { setCurrentTrack } = useCurrentTrack(); */
   const { name, author, album, duration_in_seconds, _id } = track; /* 
   const isPlaying = currentTrack ? currentTrack._id === _id : false; */
@@ -35,11 +35,11 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
                   [styles.active]: isPlaying,
                 })}
               >
-                <use xlinkHref="img/icon/sprite.svg#icon-playingTrack"></use>
+                <use xlinkHref="/img/icon/sprite.svg#icon-playingTrack"></use>
               </svg>
             ) : (
               <svg className={styles.trackTitleSvg}>
-                <use xlinkHref="img/icon/sprite.svg#icon-note" />
+                <use xlinkHref="/img/icon/sprite.svg#icon-note" />
               </svg>
             )}
           </div>
@@ -56,9 +56,13 @@ export function PlaylistItem({ track, tracks }: TrackProps) {
           <span className={styles.trackAlbumLink}>{album}</span>
         </div>
         <div onClick={handleLike} className="track__time">
-            <svg className={classNames(styles.trackTimeSvg, {[styles.active]: isLiked})}>
-              <use xlinkHref="img/icon/sprite.svg#icon-like" />
-            </svg>
+          <svg
+            className={classNames(styles.trackTimeSvg, {
+              [styles.active]: isLiked,
+            })}
+          >
+            <use xlinkHref="/img/icon/sprite.svg#icon-like" />
+          </svg>
           <span className={styles.trackTimeText}>
             {printTime(duration_in_seconds)}
           </span>

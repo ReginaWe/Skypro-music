@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import { useAppDispatch } from "@/hooks/hooks";
 import styles from "./SearchBar.module.css";
 import { ChangeEvent, useState } from "react";
-import { setFilters } from "@/store/features/playlistSlice";
+import { setFilters } from "@/store/features/playerSlice";
 
 export default function SearchBar() {
   const dispatch = useAppDispatch();
@@ -16,7 +16,7 @@ export default function SearchBar() {
   return (
     <div className={styles.searchBar}>
       <svg className={styles.searchSvg}>
-        <use xlinkHref="img/icon/sprite.svg#icon-search" />
+        <use xlinkHref="/img/icon/sprite.svg#icon-search" />
       </svg>
       <input
         className={styles.searchText}

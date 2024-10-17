@@ -12,7 +12,7 @@ import {
   setIsShuffle,
   setNextTrack,
   setPrevTrack,
-} from "@/store/features/playlistSlice";
+} from "@/store/features/playerSlice";
 
 const Player = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -20,7 +20,7 @@ const Player = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { currentTrack, isPlaying, isShuffle } = useAppSelector(
-    (state) => state.playlist
+    (state) => state.player
   );
   const dispatch = useAppDispatch();
 
@@ -30,10 +30,10 @@ const Player = () => {
     }
     const handleGoNext = () => {
       if (!isLoop) {
-        handleNextTrack()
+        handleNextTrack();
       }
-    }
-    
+    };
+
     const audio = audioRef.current;
     audio.addEventListener("ended", handleGoNext);
 
@@ -63,12 +63,15 @@ const Player = () => {
     currentAudio.play();
   }, [currentTrack]);
 
-  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = Number(e.target.value);
-    }
-  }, []);
-  
+  const handleSeek = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = Number(e.target.value);
+      }
+    },
+    [audioRef]
+  );
+
   if (!currentTrack) {
     return null;
   }
@@ -76,7 +79,6 @@ const Player = () => {
 
   const duration = audioRef.current?.duration || 0;
 
-  
   //Функция воспроизведения и паузы трека
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -120,7 +122,7 @@ const Player = () => {
             <div className={styles.playerControls}>
               <div onClick={handlePrevTrack} className={styles.playerBtnPrev}>
                 <svg className={styles.playerBtnPrevSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-prev" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-prev" />
                 </svg>
               </div>
               <div
@@ -129,17 +131,17 @@ const Player = () => {
               >
                 {isPlaying ? (
                   <svg className={styles.playerBtnPlaySvg}>
-                    <use xlinkHref="img/icon/sprite.svg#icon-pause" />
+                    <use xlinkHref="/img/icon/sprite.svg#icon-pause" />
                   </svg>
                 ) : (
                   <svg className={styles.playerBtnPlaySvg}>
-                    <use xlinkHref="img/icon/sprite.svg#icon-play" />
+                    <use xlinkHref="/img/icon/sprite.svg#icon-play" />
                   </svg>
                 )}
               </div>
               <div onClick={handleNextTrack} className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-next" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-next" />
                 </svg>
               </div>
               <div
@@ -149,7 +151,7 @@ const Player = () => {
                 onClick={repeatTrack}
               >
                 <svg className={classNames(styles.playerBtnRepeatSvg)}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-repeat" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-repeat" />
                 </svg>
               </div>
               <div
@@ -163,11 +165,11 @@ const Player = () => {
                 )}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
-                  <use xlinkHref="img/icon/sprite.svg#icon-shuffle" />
+                  <use xlinkHref="/img/icon/sprite.svg#icon-shuffle" />
                 </svg>
               </div>
             </div>
-            <TrackPlay track={currentTrack}/>
+            <TrackPlay track={currentTrack} />
           </div>
           <Volume audioRef={audioRef} />
           <span className={styles.barTimers}>

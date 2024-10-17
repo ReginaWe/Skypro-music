@@ -2,13 +2,19 @@
 import styles from "../../page.module.css";
 import Filter from "../../components/Filter/Filter";
 import Playlist from "../../components/Playlist/Playlist";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import { checkUser } from "@/store/features/authSlice";
+import { setVisibleTracks } from "@/store/features/playerSlice";
 
 export default function Favorites() {
-  const likedTracks = useAppSelector((state) => state.playlist.likedTracks);
+  const dispatch = useAppDispatch();
+  const { likedTracks, visibleTracks, filteredTracks } = useAppSelector(
+    (state) => state.player
+  );
+  console.log("liked:", likedTracks);
+  console.log("visible:", visibleTracks);
   const hasUser = useAppSelector(checkUser);
 
   function doRedirectIfNeeds() {
@@ -16,17 +22,29 @@ export default function Favorites() {
       redirect("/tracks");
     }
   }
+
   useEffect(() => {
     doRedirectIfNeeds();
   }, [hasUser]);
 
   doRedirectIfNeeds();
 
+  /*  useEffect(() => {
+    dispatch(setVisibleTracks({tracks: likedTracks}));
+  }, []); */
+
+  useEffect(() => {
+    dispatch(setVisibleTracks({ tracks: likedTracks }));
+  }, [likedTracks]);
+
+  if (!visibleTracks.length) {
+    return <p>ошибка</p>;
+  }
   return (
     <>
       <h2 className={styles.centerblockH2}>Избранные треки</h2>
-      <Filter tracks={likedTracks} />
-      <Playlist tracks={likedTracks} />
+      <Filter tracks={visibleTracks} />
+      <Playlist tracks={filteredTracks} />
     </>
   );
 }

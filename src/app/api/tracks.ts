@@ -7,7 +7,7 @@ const API_URL =
 const BASE_URL = "https://webdev-music-003b5b991590.herokuapp.com/catalog/";
 const URL_Selection = "https://webdev-music-003b5b991590.herokuapp.com/catalog/selection/"
 
-export async function getTracks() {
+export async function getTracks():Promise<TrackType[]> {
   const res = await fetch(API_URL);
 
   if (!res.ok) {

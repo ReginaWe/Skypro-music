@@ -1,19 +1,21 @@
 import { UserType } from "./user";
 
 export type TrackType = {
-    _id: number;
-    name: string;
-    author: string;
-    release_date: string;
-    genre: string;
-    duration_in_seconds: number;
-    album: string;
-    logo: string | null;
-    track_file: string;
-    stared_user: UserType[];
-}
+  _id: number;
+  name: string;
+  author: string;
+  release_date: string;
+  genre: string[];
+  duration_in_seconds: number;
+  album: string;
+  logo: string | null;
+  track_file: string;
+  stared_user: UserType[];
+};
 
 export type CategoryDataType = {
-    name: string,
-    items: number[],
-  }
+  name: string;
+  items: number[];
+};
+
+export type SortOptions = "" | "возр" | "убыв";

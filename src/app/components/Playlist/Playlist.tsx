@@ -1,3 +1,4 @@
+"use client";
 import { TrackType } from "@/app/types/tracks";
 import PlaylistItem from "../PlaylistItem/PlaylistItem";
 import styles from "./Playlist.module.css";
@@ -9,9 +10,9 @@ type PlaylistProps = {
 };
 
 export default function Playlist({ tracks }: PlaylistProps) {
-  const filteredTracks = useAppSelector(
-    (state) => state.playlist.filteredTracks
-  );
+  /*  const filteredTracks = useAppSelector(
+    (state) => state.player.filteredTracks
+  ); */
   return (
     <div className={styles.centerblockContent}>
       <div className={styles.contentTitle}>
@@ -26,7 +27,7 @@ export default function Playlist({ tracks }: PlaylistProps) {
         </div>
         <div className={classNames(styles.playlistTitleCol, styles.col04)}>
           <svg className={styles.playlistTitleSvg}>
-            <use xlinkHref="img/icon/sprite.svg#icon-watch" />
+            <use xlinkHref="/img/icon/sprite.svg#icon-watch" />
           </svg>
         </div>
       </div>
@@ -34,17 +35,17 @@ export default function Playlist({ tracks }: PlaylistProps) {
         {/* {tracks.map((track) => (
           <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))} */}
-        {filteredTracks.map((track: TrackType) => (
-          <PlaylistItem key={track._id} track={track} tracks={filteredTracks} />
+        {tracks.map((track: TrackType) => (
+          <PlaylistItem key={track._id} track={track} tracks={tracks} />
         ))}
       </div>
     </div>
   );
 }
 
-function Fn1() {} // function declaration
-const Fn2 = function () {} // function expression
-const Fn3 = () => {} // arrow function
+/* function Fn1() {} // => undefined // function declaration
+const Fn2 = function () {} // => undefined // function expression
+const Fn3 = () => {} // => undefined // arrow function
 
 function Fn14() { return 0 }
 const Fn24 = function () { return 0 }
@@ -56,11 +57,27 @@ const Fn37 = () => (
 )
 
 const Fn38 = () => (
-  console.log("object")
+  console.log("object") // => undefined
 )
 
 const obj = {
-  fn2: function () {},
-  fn3: () => {},
-  fn4() {},
+  fn2: function () {}, // => undefined
+  fn3: () => {}, // => undefined
+  fn4() {}, // => undefined
 }
+
+// classes
+
+class Tst {
+  x: number = 0
+
+  constructor(_x: number = 0) {
+    this.x = 1
+  }
+
+  fn4() {} // => undefined
+}
+
+const tst1 = new Tst()
+const tst2 = new Tst(5)
+tst2.fn4() */

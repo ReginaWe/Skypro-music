@@ -1,13 +1,11 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useState } from "react";
 import styles from "./Volume.module.css";
 import classNames from "classnames";
-import { useCurrentTrack } from "@/contexts/CurrentTrackProvider";
-
 type VolumeProps = {
   audioRef: RefObject<HTMLAudioElement>;
 };
 
-const Volume = ({ audioRef }: VolumeProps) => {
+const Volume = React.memo(({ audioRef }: VolumeProps) => {
   const [volume, setVolume] = useState<number>(0.5); // Начальная громкость установлена на 50%
 
   useEffect(() => {
@@ -15,10 +13,6 @@ const Volume = ({ audioRef }: VolumeProps) => {
       audioRef.current.volume = volume;
     }
   }, [volume, audioRef]);
-
-  /* function handleChangeVolume(event: ChangeEvent<HTMLInputElement>) {
-    setVolume(Number(event.target.value))
-  } */
 
   return (
     <div className={styles.barVolumeBlock}>
@@ -42,6 +36,6 @@ const Volume = ({ audioRef }: VolumeProps) => {
       </div>
     </div>
   );
-};
-
+});
+Volume.displayName = "Volume";
 export default Volume;
